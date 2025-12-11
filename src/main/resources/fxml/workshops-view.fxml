@@ -1,0 +1,10 @@
+<!--
+    Manage workshops
+        CRUD screen for workshops
+            Include
+                TableView of all workshops
+                Add / Edit / Delete workshop
+                Show internal/external type
+                    Show all workshop information
+                    Large trucks cannot be serviced by internal workshops (validation)
+-->

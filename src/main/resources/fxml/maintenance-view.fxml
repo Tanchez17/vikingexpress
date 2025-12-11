@@ -1,0 +1,10 @@
+<!--
+    Maintenance schedules
+        Manages maintenance schedules each vehicle
+            Contains
+                Maintenance overview table
+                add / remove schedule items
+                Link each item to a workshop
+                    Maintenance schedule for each vehicle
+                    Workshop handling maintenance
+-->
