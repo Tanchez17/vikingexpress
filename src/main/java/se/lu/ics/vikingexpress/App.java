@@ -1,21 +1,27 @@
 package se.lu.ics.vikingexpress;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+// Använd kommando: mvn clean javafx:run
+// För att köra programmet från terminalen med Maven
 
 public class App extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        Label label = new Label("VikingExpress Fleet Manager");
-        StackPane root = new StackPane(label);
+    public void start(Stage primaryStage) throws Exception {
 
-        Scene scene = new Scene(root, 600, 400);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/main-view.fxml"));
 
-        primaryStage.setTitle("VikingExpress");
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root, 1000, 700);
+
+        primaryStage.setTitle("VikingExpress Fleet Management");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
