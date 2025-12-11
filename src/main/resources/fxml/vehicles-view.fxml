@@ -1,0 +1,13 @@
+<!--
+    Manage vehicles
+        CRUD screen for vehicles.
+            Include:
+		        TableView of all vehicles
+		        Add / Edit / Delete vehicle
+		        Vehicle information panel (type, capacity, location, VIN auto-generated)
+		        Button to view a specific vehicle’s service history
+                    Show information on all vehicles
+                    VIN auto-generation
+                    VIN uniqueness
+                    Capacity non-negative
+-->

@@ -1,0 +1,15 @@
+<!--
+    Overview + filters
+        Shows all service history entries
+            Include
+                TableView showing service entries
+                Buttons to add / edit / delete service entries
+                Filter by workshop
+                Filter by vehicle
+                    Display full service history for a vehicle
+                    Display full service history for a workshop
+                    Add/remove service activities
+                    Show number of parts replaced
+                    Warning if total cost exceeds 100 000
+                    Vehicle decommissioning if > 100 parts
+-->

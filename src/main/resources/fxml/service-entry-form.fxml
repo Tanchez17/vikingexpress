@@ -1,0 +1,11 @@
+<!--
+    ADD/ edit service entries
+        A popup/dialog to create or edit a service entry
+            Contains
+                Date
+                Description of problem
+                Cost
+                Workshop Selection
+                List of service activities
+                Parts replaced
+-->
