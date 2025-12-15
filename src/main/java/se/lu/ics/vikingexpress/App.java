@@ -21,6 +21,11 @@ public class App extends Application {
 
         Scene scene = new Scene(root, 1000, 700);
 
+        primaryStage.setWidth(1200);
+        primaryStage.setHeight(800);
+        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(650);
+        
         primaryStage.setTitle("VikingExpress Fleet Management");
         primaryStage.setScene(scene);
         primaryStage.show();
