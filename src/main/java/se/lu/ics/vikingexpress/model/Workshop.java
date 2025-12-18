@@ -64,8 +64,10 @@ public class Workshop {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Workshop workshop = (Workshop) o;
         return name.equals(workshop.name);
     }

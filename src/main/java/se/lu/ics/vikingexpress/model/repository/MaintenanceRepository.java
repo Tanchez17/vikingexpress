@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Collections;
 
 public class MaintenanceRepository {
-    
+
     private final List<MaintenanceSchedule> maintenanceSchedules = new ArrayList<>();
 
     public void addMaintenanceSchedule(MaintenanceSchedule schedule) {
@@ -30,26 +30,29 @@ public class MaintenanceRepository {
     }
 
     public List<MaintenanceSchedule> getSchedulesByVehicle(Vehicle vehicle) {
-        List<MaintenanceSchedule> result = new ArrayList<>();
-        for (MaintenanceSchedule s : maintenanceSchedules) {
-            if (s.getVehicle().equals(vehicle)) {
-                result.add(s);
-            }
-        }
-        return result;
+        return maintenanceSchedules.stream()
+                .filter(s -> s.getVehicle().equals(vehicle))
+                .toList();
     }
 
     public List<MaintenanceSchedule> getSchedulesByWorkshop(Workshop workshop) {
-        List<MaintenanceSchedule> result = new ArrayList<>();
-        for (MaintenanceSchedule s : maintenanceSchedules) {
-            if (s.getWorkshop().equals(workshop)) {
-                result.add(s);
-            }
-        }
-        return result;
+        return maintenanceSchedules.stream()
+                .filter(s -> s.getWorkshop().equals(workshop))
+                .toList();
+    }
+
+    public void markAsCompleted(MaintenanceSchedule schedule) {
+        schedule.markCompleted(java.time.LocalDate.now());
     }
 
     public int size() {
         return maintenanceSchedules.size();
+    }
+
+    public void clearAll() {
+        for (MaintenanceSchedule schedule : new ArrayList<>(maintenanceSchedules)) {
+            schedule.getVehicle().removeMaintenanceSchedule(schedule);
+        }
+        maintenanceSchedules.clear();
     }
 }

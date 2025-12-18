@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox styleClass="content-view" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.lu.ics.vikingexpress.controller.DashboardController">
+   <children>
+      <VBox styleClass="content-header">
+         <children>
+            <Label styleClass="label-title" text="Dashboard" />
+         </children>
+      </VBox>
+      
+      <VBox styleClass="content-body" VBox.vgrow="ALWAYS">
+         <children>
+
+            <HBox spacing="15.0">
+               <children>
+                  <VBox styleClass="content-panel" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <Label styleClass="label-subtitle" text="Total Vehicles" />
+                        <Label fx:id="totalVehiclesLabel" styleClass="label-title" text="0" />
+                     </children>
+                  </VBox>
+
+                  <VBox styleClass="content-panel" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <Label styleClass="label-subtitle" text="Available" />
+                        <Label fx:id="availableVehiclesLabel" styleClass="label-title" text="0" />
+                     </children>
+                  </VBox>
+
+                  <VBox styleClass="content-panel" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <Label styleClass="label-subtitle" text="In Service" />
+                        <Label fx:id="inServiceVehiclesLabel" styleClass="label-title" text="0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <VBox spacing="15.0" styleClass="content-panel">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <Label styleClass="label-header" text="Cost Indicators" />
+                  <Separator />
+                  <HBox spacing="30.0">
+                     <children>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="label-subtitle" text="Total Service Cost" />
+                              <Label fx:id="totalCostLabel" styleClass="cost-display" text="0.00" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="label-subtitle" text="Average Cost" />
+                              <Label fx:id="averageCostLabel" styleClass="cost-display" text="0.00" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="label-subtitle" text="Most Expensive Job" />
+                              <Label fx:id="mostExpensiveJobLabel" styleClass="cost-display" text="N/A" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="label-subtitle" text="Most Costly Workshop" />
+                              <Label fx:id="mostCostlyWorkshopLabel" styleClass="label-header" text="N/A" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+
+            <HBox spacing="15.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox spacing="10.0" styleClass="content-panel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label styleClass="label-header" text="Warnings &amp; Alerts" />
+                              <Label fx:id="warningCountLabel" styleClass="label-subtitle" text="" />
+                           </children>
+                        </HBox>
+                        <Separator />
+                        <ListView fx:id="warningsListView" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+
+                  <VBox spacing="10.0" styleClass="content-panel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label styleClass="label-header" text="Upcoming Maintenance" />
+                              <Label fx:id="upcomingCountLabel" styleClass="label-subtitle" text="" />
+                           </children>
+                        </HBox>
+                        <Separator />
+                        <ListView fx:id="upcomingMaintenanceListView" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

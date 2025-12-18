@@ -24,12 +24,10 @@ public class VehicleRepository {
     }
 
     public Vehicle findByVin(long vin) {
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getVin() == vin) {
-                return vehicle;
-            }
-        }
-        return null;
+        return vehicles.stream()
+                .filter(v -> v.getVin() == vin)
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Vehicle> getAllVehicles() {
@@ -38,5 +36,9 @@ public class VehicleRepository {
 
     public int size() {
         return vehicles.size();
+    }
+
+    public void clearAll() {
+        vehicles.clear();
     }
 }

@@ -4,10 +4,9 @@ import se.lu.ics.vikingexpress.model.Vehicle;
 import se.lu.ics.vikingexpress.model.ServiceEntry;
 import se.lu.ics.vikingexpress.model.Workshop;
 
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.List;
 
 public final class CostCalculator {
@@ -17,23 +16,16 @@ public final class CostCalculator {
     }
 
     public static double calculateTotalCostForVehicle(Vehicle vehicle, List<ServiceEntry> serviceEntries) {
-        double sum = 0;
-
-        for (ServiceEntry entry : serviceEntries) {
-            if (entry.getVehicle().equals(vehicle)) {
-                sum += entry.getCost();
-            }
-        }
-        return sum;
+        return serviceEntries.stream()
+                .filter(entry -> entry.getVehicle().equals(vehicle))
+                .mapToDouble(ServiceEntry::getCost)
+                .sum();
     }
 
     public static double calculateTotalCostForAllVehicles(List<ServiceEntry> serviceEntries) {
-        double sum = 0;
-
-        for (ServiceEntry entry : serviceEntries) {
-            sum += entry.getCost();
-        }
-        return sum;
+        return serviceEntries.stream()
+                .mapToDouble(ServiceEntry::getCost)
+                .sum();
     }
 
     public static double calculateAverageCost(List<Vehicle> vehicles, List<ServiceEntry> serviceEntries) {
@@ -44,56 +36,29 @@ public final class CostCalculator {
     }
 
     public static ServiceEntry findMostExpensiveServiceEntry(List<ServiceEntry> serviceEntries) {
-        ServiceEntry mostExpensive = null;
-        double maxCost = Double.NEGATIVE_INFINITY;
-
-        for (ServiceEntry entry : serviceEntries) {
-            if (entry.getCost() > maxCost) {
-                maxCost = entry.getCost();
-                mostExpensive = entry;
-            }
+        if (serviceEntries == null || serviceEntries.isEmpty()) {
+            return null;
         }
-        return mostExpensive;
+        
+        return serviceEntries.stream()
+                .max(Comparator.comparingDouble(ServiceEntry::getCost))
+                .orElse(null);
     }
 
     public static Workshop findMostExpensiveWorkshop(List<ServiceEntry> serviceEntries) {
-        if (serviceEntries.isEmpty()) {
+        if (serviceEntries == null || serviceEntries.isEmpty()) {
             return null;
         }
 
         Map<Workshop, Double> costPerWorkshop = new HashMap<>();
-
         for (ServiceEntry entry : serviceEntries) {
-            Workshop workshop = entry.getWorkshop();
-            double newTotal = costPerWorkshop.getOrDefault(workshop, 0.0) + entry.getCost();
-            costPerWorkshop.put(workshop, newTotal);
+            costPerWorkshop.merge(entry.getWorkshop(), entry.getCost(), Double::sum);
         }
 
-        Workshop mostExpensiveWorkshop = null;
-        double maxTotal = Double.NEGATIVE_INFINITY;
-
-        for (Map.Entry<Workshop, Double> workshopEntry : costPerWorkshop.entrySet()) {
-            if (workshopEntry.getValue() > maxTotal) {
-                maxTotal = workshopEntry.getValue();
-                mostExpensiveWorkshop = workshopEntry.getKey();
-            }
-        }
-        return mostExpensiveWorkshop;
+        return costPerWorkshop.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 
-    public static Set<Workshop> getWorkshopsForVehicle(Vehicle vehicle, List<ServiceEntry> serviceEntries) {
-        Set<Workshop> workshops = new HashSet<>();
-        for (ServiceEntry entry : serviceEntries) {
-            if (entry.getVehicle().equals(vehicle)) {
-                workshops.add(entry.getWorkshop());
-            }
-        }
-        return workshops;
-    }
-
-    public static boolean isTotalCostOverLimitForVehicle(Vehicle vehicle, List<ServiceEntry> serviceEntries,
-            double limit) {
-        double total = calculateTotalCostForVehicle(vehicle, serviceEntries);
-        return total > limit;
-    }
 }

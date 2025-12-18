@@ -26,16 +26,16 @@ public class WorkshopRepository {
     }
 
     public List<Workshop> getWorkshopsByType(WorkshopType type) {
-        List<Workshop> result = new ArrayList<>();
-        for (Workshop workshop : workshops) {
-            if (workshop.getType() == type) {
-                result.add(workshop);
-            }
-        }
-        return result;
+        return workshops.stream()
+                .filter(w -> w.getType() == type)
+                .toList();
     }
 
     public int size() {
         return workshops.size();
+    }
+
+    public void clearAll() {
+        workshops.clear();
     }
 }

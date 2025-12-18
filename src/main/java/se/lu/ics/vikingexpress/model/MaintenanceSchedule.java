@@ -69,7 +69,8 @@ public class MaintenanceSchedule {
         if (vehicle == null) {
             throw new IllegalArgumentException("Vehicle cannot be null.");
         }
-        if (workshop != null && vehicle.getType() == VehicleType.LARGE_TRUCK && workshop.getType() == WorkshopType.INTERNAL) {
+        if (workshop != null && vehicle.getType() == VehicleType.LARGE_TRUCK
+                && workshop.getType() == WorkshopType.INTERNAL) {
             throw new IllegalArgumentException("Large trucks cannot be serviced at internal workshops.");
         }
         this.vehicle = vehicle;
@@ -79,7 +80,8 @@ public class MaintenanceSchedule {
         if (workshop == null) {
             throw new IllegalArgumentException("Workshop cannot be null.");
         }
-        if (vehicle != null && vehicle.getType() == VehicleType.LARGE_TRUCK && workshop.getType() == WorkshopType.INTERNAL) {
+        if (vehicle != null && vehicle.getType() == VehicleType.LARGE_TRUCK
+                && workshop.getType() == WorkshopType.INTERNAL) {
             throw new IllegalArgumentException("Large trucks cannot be serviced at internal workshops.");
         }
         this.workshop = workshop;

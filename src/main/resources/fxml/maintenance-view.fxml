@@ -1,33 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <ComboBox prefWidth="150.0" promptText="Vehicle" BorderPane.alignment="CENTER" />
-   </top>
-   <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Date" />
-          <TableColumn prefWidth="75.0" text="Maintenance Type" />
-            <TableColumn prefWidth="75.0" text="Workshop" />
-            <TableColumn prefWidth="75.0" text="Notes" />
-        </columns>
-      </TableView>
-   </center>
-   <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<VBox styleClass="content-view" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.lu.ics.vikingexpress.controller.MaintenanceController">
+   <children>
+      <VBox styleClass="content-header">
          <children>
-            <Button mnemonicParsing="false" text="Add Maintenance" />
-            <Button mnemonicParsing="false" text="Remove Maintenance" />
+            <Label styleClass="label-title" text="Maintenance Schedule" />
+            <Label styleClass="label-subtitle" text="Schedule and manage upcoming maintenance. Use 'Complete Maintenance' to mark scheduled maintenance as done." />
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+               <children>
+                  <Label text="Select Vehicle:" />
+                  <ComboBox fx:id="vehicleCombo" onAction="#onVehicleSelected" prefWidth="200.0" promptText="Select vehicle..." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      
+      <VBox styleClass="content-body" VBox.vgrow="ALWAYS">
+         <children>
+            <TableView fx:id="maintenanceTable" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
+                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Maintenance Type" />
+                  <TableColumn fx:id="workshopColumn" prefWidth="75.0" text="Workshop" />
+                  <TableColumn fx:id="notesColumn" prefWidth="75.0" text="Notes" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </VBox>
+      
+      <HBox styleClass="content-actions" alignment="CENTER" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onAddMaintenance" styleClass="button-primary" text="Add Maintenance" />
+            <Button mnemonicParsing="false" onAction="#onEditMaintenance" text="Edit Maintenance" />
+            <Button mnemonicParsing="false" onAction="#onCompleteMaintenance" text="Complete Maintenance" />
+            <Button mnemonicParsing="false" onAction="#onRemoveMaintenance" styleClass="button-danger" text="Remove Maintenance" />
          </children>
       </HBox>
-   </bottom>
-</BorderPane>
+   </children>
+</VBox>

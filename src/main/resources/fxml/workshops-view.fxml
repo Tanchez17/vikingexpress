@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Name" />
-          <TableColumn prefWidth="75.0" text="Type" />
-            <TableColumn prefWidth="75.0" text="Address" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </center>
-   <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+<VBox styleClass="content-view" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.lu.ics.vikingexpress.controller.WorkshopController">
+   <children>
+      <VBox styleClass="content-header">
          <children>
-            <TextField promptText="Name" />
-            <TextField promptText="Type" />
-            <TextField promptText="Address" />
+            <Label styleClass="label-title" text="Workshops" />
          </children>
       </VBox>
-   </right>
-   <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      
+      <HBox styleClass="content-body" spacing="20.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button mnemonicParsing="false" text="Add Workshop" />
-            <Button mnemonicParsing="false" text="Edit Workshop" />
-            <Button mnemonicParsing="false" text="Delete Workshop" />
-            <Button mnemonicParsing="false" text="Show Service History" />
+            <TableView fx:id="workshopTable" onMouseClicked="#onSelectWorkshop" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+                  <TableColumn fx:id="addressColumn" prefWidth="75.0" text="Address" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            
+            <VBox spacing="10.0" styleClass="form-panel" prefWidth="300.0">
+               <children>
+                  <Label styleClass="label-header" text="Workshop Details" />
+                  <TextField fx:id="nameField" promptText="Name" />
+                  <javafx.scene.control.ComboBox fx:id="typeCombo" promptText="Type" />
+                  <TextField fx:id="addressField" promptText="Address" />
+               </children>
+            </VBox>
          </children>
       </HBox>
-   </bottom>
-</BorderPane>
+      
+      <HBox styleClass="content-actions" alignment="CENTER" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onAddWorkshop" styleClass="button-primary" text="Add Workshop" />
+            <Button mnemonicParsing="false" onAction="#onEditWorkshop" text="Edit Workshop" />
+            <Button mnemonicParsing="false" onAction="#onDeleteWorkshop" styleClass="button-danger" text="Delete Workshop" />
+            <Button mnemonicParsing="false" onAction="#onShowServiceHistory" text="Service History" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
