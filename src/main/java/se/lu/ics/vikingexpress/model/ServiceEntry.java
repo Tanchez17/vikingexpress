@@ -41,7 +41,8 @@ public class ServiceEntry {
             throw new IllegalArgumentException("Parts replaced cannot be negative.");
         }
         if (partsReplaced > MAX_PARTS_REPLACED) {
-            throw new IllegalArgumentException("A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
+            throw new IllegalArgumentException(
+                    "A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
         }
 
         this.vehicle = vehicle;
@@ -102,7 +103,8 @@ public class ServiceEntry {
             throw new IllegalArgumentException("Parts replaced cannot be negative.");
         }
         if (partsReplaced > MAX_PARTS_REPLACED) {
-            throw new IllegalArgumentException("A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
+            throw new IllegalArgumentException(
+                    "A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
         }
         this.partsReplaced = partsReplaced;
     }
@@ -111,7 +113,8 @@ public class ServiceEntry {
         if (vehicle == null) {
             throw new IllegalArgumentException("Vehicle cannot be null.");
         }
-        if (workshop != null && vehicle.getType() == VehicleType.LARGE_TRUCK && workshop.getType() == WorkshopType.INTERNAL) {
+        if (workshop != null && vehicle.getType() == VehicleType.LARGE_TRUCK
+                && workshop.getType() == WorkshopType.INTERNAL) {
             throw new IllegalArgumentException("Large trucks cannot be serviced at internal workshops.");
         }
         this.vehicle = vehicle;
@@ -121,7 +124,8 @@ public class ServiceEntry {
         if (workshop == null) {
             throw new IllegalArgumentException("Workshop cannot be null.");
         }
-        if (vehicle != null && vehicle.getType() == VehicleType.LARGE_TRUCK && workshop.getType() == WorkshopType.INTERNAL) {
+        if (vehicle != null && vehicle.getType() == VehicleType.LARGE_TRUCK
+                && workshop.getType() == WorkshopType.INTERNAL) {
             throw new IllegalArgumentException("Large trucks cannot be serviced at internal workshops.");
         }
         this.workshop = workshop;

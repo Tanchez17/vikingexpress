@@ -77,9 +77,8 @@ public class Vehicle {
     public void setCapacity(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than zero.");
-        } else {
-            this.capacity = capacity;
         }
+        this.capacity = capacity;
     }
 
     public void addServiceEntry(ServiceEntry entry) {
@@ -119,8 +118,10 @@ public class Vehicle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Vehicle vehicle = (Vehicle) o;
         return vin == vehicle.vin;
     }

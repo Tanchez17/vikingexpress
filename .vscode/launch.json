@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ModelIntegrationTest",
+            "request": "launch",
+            "mainClass": "vikingexpress.fleet/se.lu.ics.vikingexpress.model.ModelIntegrationTest",
+            "projectName": "vikingexpress-fleet"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "vikingexpress.fleet/se.lu.ics.vikingexpress.App",
+            "projectName": "vikingexpress-fleet"
+        },
+        {
+            "type": "java",
+            "name": "Run ModelIntegrationTest",
+            "request": "launch",
+            "mainClass": "se.lu.ics.vikingexpress.model.ModelIntegrationTest",
+            "classPaths": [
+                "target/classes",
+                "target/test-classes"
+            ],
+            "projectName": "vikingexpress-fleet"
+        }
+    ]
+}

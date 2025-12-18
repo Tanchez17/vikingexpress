@@ -31,7 +31,6 @@ public class ModelIntegrationTest {
         System.out.println("\nALL TESTS COMPLETED (Check output for expected exceptions/messages)");
     }
 
-    // Workshop Tests
     private static void testWorkshopValidCreation() {
         System.out.println("\nTEST: Workshop Valid Creation");
         Workshop internal = new Workshop("Main Workshop", WorkshopType.INTERNAL, "Lund, Sweden");
@@ -48,7 +47,6 @@ public class ModelIntegrationTest {
     private static void testWorkshopValidationRules() {
         System.out.println("\nTEST: Workshop Validation Rules");
 
-        // Constructor name null/ blank
         try {
             new Workshop(null, WorkshopType.EXTERNAL, "Address");
             System.out.println("ERROR: Null name accepted");
@@ -63,7 +61,6 @@ public class ModelIntegrationTest {
             System.out.println("OK: Blank name rejected: " + e.getMessage());
         }
 
-        // Constructor type null
         try {
             new Workshop("Name", null, "Address");
             System.out.println("ERROR: Null type accepted");
@@ -71,7 +68,6 @@ public class ModelIntegrationTest {
             System.out.println("OK: Null type rejected: " + e.getMessage());
         }
 
-        // Constructor address null/ blank
         try {
             new Workshop("Name", WorkshopType.EXTERNAL, null);
             System.out.println("ERROR: Null address accepted");
@@ -79,7 +75,6 @@ public class ModelIntegrationTest {
             System.out.println("OK: Null address rejected: " + e.getMessage());
         }
 
-        // Setter validations
         Workshop ws = new Workshop("Valid Name", WorkshopType.INTERNAL, "Valid Address");
         try {
             ws.setName(null);
@@ -119,14 +114,12 @@ public class ModelIntegrationTest {
         System.out.println("ws2: " + ws2);
         System.out.println("ws3: " + ws3);
 
-        System.out.println("ws1.equals(ws2):? " + ws1.equals(ws2)); // True same name
-        System.out.println("ws1.equals(ws3):? " + ws1.equals(ws3)); // False different name
+        System.out.println("ws1.equals(ws2):? " + ws1.equals(ws2));
+        System.out.println("ws1.equals(ws3):? " + ws1.equals(ws3));
 
-        System.out.println("ws1.hashCode() ==  ws2.hashCode():? " + (ws1.hashCode() == ws2.hashCode())); // True same
-                                                                                                         // name
+        System.out.println("ws1.hashCode() ==  ws2.hashCode():? " + (ws1.hashCode() == ws2.hashCode()));
     }
 
-    // Vehicle Tests
     private static void testVehicleBasic() {
         System.out.println("\nTEST: Vehicle Basic Construction");
 
@@ -223,8 +216,8 @@ public class ModelIntegrationTest {
         v12.addServiceEntry(se1);
         v12.addServiceEntry(se2);
 
-        System.out.println("Total Service Cost: " + v12.getTotalServiceCost()); // Expected: 21500
-        System.out.println("Total Parts Replaced: " + v12.getTotalPartsReplaced()); // Expected: 6
+        System.out.println("Total Service Cost: " + v12.getTotalServiceCost());
+        System.out.println("Total Parts Replaced: " + v12.getTotalPartsReplaced());
     }
 
     private static void testServiceEntryValidCreation() {
@@ -320,7 +313,6 @@ public class ModelIntegrationTest {
         }
     }
 
-    // MaintenanceSchedule Tests
     private static void testMaintenanceScheduleValidCreation() {
         System.out.println("\nTEST: MaintenanceSchedule Valid Creation");
 
@@ -388,7 +380,6 @@ public class ModelIntegrationTest {
         }
     }
 
-    // Large Truck & Internal Workshop Rule Test
     private static void testLargeTruckInternalWorkshopRule() {
         System.out.println("\nTEST: Large Truck & Internal Workshop Rule");
 

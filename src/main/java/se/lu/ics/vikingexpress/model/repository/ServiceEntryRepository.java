@@ -30,36 +30,32 @@ public class ServiceEntryRepository {
     }
 
     public List<ServiceEntry> findByVehicle(Vehicle vehicle) {
-        List<ServiceEntry> result = new ArrayList<>();
-        for (ServiceEntry e : serviceEntries) {
-            if (e.getVehicle().equals(vehicle)) {
-                result.add(e);
-            }
-        }
-        return result;
+        return serviceEntries.stream()
+                .filter(e -> e.getVehicle().equals(vehicle))
+                .toList();
     }
 
     public List<ServiceEntry> findByWorkshop(Workshop workshop) {
-        List<ServiceEntry> result = new ArrayList<>();
-        for (ServiceEntry e : serviceEntries) {
-            if (e.getWorkshop().equals(workshop)) {
-                result.add(e);
-            }
-        }
-        return result;
+        return serviceEntries.stream()
+                .filter(e -> e.getWorkshop().equals(workshop))
+                .toList();
     }
 
     public double getTotalServiceCost(Vehicle vehicle) {
-        double total = 0;
-        for (ServiceEntry e : serviceEntries) {
-            if (e.getVehicle().equals(vehicle)) {
-                total += e.getCost();
-            }
-        }
-        return total;
+        return serviceEntries.stream()
+                .filter(e -> e.getVehicle().equals(vehicle))
+                .mapToDouble(ServiceEntry::getCost)
+                .sum();
     }
 
     public double getTotalCostForAllVehicles() {
         return serviceEntries.stream().mapToDouble(ServiceEntry::getCost).sum();
+    }
+
+    public void clearAll() {
+        for (ServiceEntry entry : new ArrayList<>(serviceEntries)) {
+            entry.getVehicle().removeServiceEntry(entry);
+        }
+        serviceEntries.clear();
     }
 }
