@@ -15,13 +15,6 @@ public final class CostCalculator {
 
     }
 
-    public static double calculateTotalCostForVehicle(Vehicle vehicle, List<ServiceEntry> serviceEntries) {
-        return serviceEntries.stream()
-                .filter(entry -> entry.getVehicle().equals(vehicle))
-                .mapToDouble(ServiceEntry::getCost)
-                .sum();
-    }
-
     public static double calculateTotalCostForAllVehicles(List<ServiceEntry> serviceEntries) {
         return serviceEntries.stream()
                 .mapToDouble(ServiceEntry::getCost)

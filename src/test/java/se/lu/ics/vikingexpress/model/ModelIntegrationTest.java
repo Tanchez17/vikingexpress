@@ -5,6 +5,8 @@ import se.lu.ics.vikingexpress.model.enums.WorkshopType;
 
 import java.time.LocalDate;
 
+// mvn test-compile exec:java -Dexec.mainClass="se.lu.ics.vikingexpress.model.ModelIntegrationTest" -Dexec.classpathScope=test
+
 public class ModelIntegrationTest {
 
     public static void main(String[] args) {
