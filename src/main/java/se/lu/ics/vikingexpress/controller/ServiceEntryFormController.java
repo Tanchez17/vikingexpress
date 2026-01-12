@@ -2,6 +2,7 @@ package se.lu.ics.vikingexpress.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import se.lu.ics.vikingexpress.model.Vehicle;
@@ -33,6 +34,7 @@ public class ServiceEntryFormController {
     private ListView<String> partsListView;
 
     private final DataService dataService = DataService.getInstance();
+    private ServiceEntry editingEntry = null;
 
     @FXML
     public void initialize() {
@@ -52,6 +54,24 @@ public class ServiceEntryFormController {
                 .filter(vehicle -> !vehicle.isDecommissioned())
                 .collect(Collectors.toList());
         vehicleCombo.setItems(FXCollections.observableArrayList(availableVehicles));
+    }
+
+    public void setServiceEntry(ServiceEntry entry) {
+        this.editingEntry = entry;
+        if (entry != null) {
+            vehicleCombo.setValue(entry.getVehicle());
+            workshopCombo.setValue(entry.getWorkshop());
+            datePicker.setValue(entry.getDate());
+            problemDescriptionArea.setText(entry.getProblemDescription());
+            costField.setText(String.valueOf(entry.getCost()));
+            partsReplacedField.setText(String.valueOf(entry.getPartsReplaced()));
+            
+            // Populate parts list
+            partsListView.getItems().clear();
+            for (int i = 1; i <= entry.getPartsReplaced(); i++) {
+                partsListView.getItems().add("Part " + i);
+            }
+        }
     }
 
     private void loadWorkshops() {
@@ -116,19 +136,24 @@ public class ServiceEntryFormController {
             double cost = Double.parseDouble(costStr);
             int parts = Integer.parseInt(partsStr);
 
-            ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
-            dataService.addServiceEntry(entry);
-            double totalCost = dataService.getTotalServiceCost(vehicle);
-            if (totalCost > 100000.0) {
-                AlertUtils.showWarningAlert("Cost Warning", "Cost Threshold Exceeded",
-                        String.format("Warning: The total cost for %s (VIN: %d) now exceeds 100,000 SEK.\n\n" +
-                                "Current total cost: %.2f SEK\n" +
-                                "This vehicle has exceeded the cost threshold.",
-                                vehicle.getName(), vehicle.getVin(), totalCost));
+            if (editingEntry != null) {
+                // Update existing entry
+                editingEntry.setVehicle(vehicle);
+                editingEntry.setWorkshop(workshop);
+                editingEntry.setDate(date);
+                editingEntry.setProblemDescription(problemDesc);
+                editingEntry.setCost(cost);
+                editingEntry.setPartsReplaced(parts);
+                AlertUtils.showAlert("Success", "Service entry updated successfully");
+            } else {
+                // Create new entry
+                ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
+                dataService.addServiceEntry(entry);
+                AlertUtils.showAlert("Success", "Service entry saved successfully");
             }
 
             clearFields();
-            AlertUtils.showAlert("Success", "Service entry saved successfully");
+            closeStage();
         } catch (NumberFormatException e) {
             AlertUtils.showAlert("Error", "Cost and parts replaced must be valid numbers");
         } catch (IllegalArgumentException e) {
@@ -139,6 +164,14 @@ public class ServiceEntryFormController {
     @FXML
     void onCancel() {
         clearFields();
+        closeStage();
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) vehicleCombo.getScene().getWindow();
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     private void clearFields() {
