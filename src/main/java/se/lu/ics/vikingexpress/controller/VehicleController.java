@@ -68,6 +68,9 @@ public class VehicleController {
                 cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCurrentLocation()));
         statusColumn.setCellValueFactory(cellData -> {
             Vehicle vehicle = cellData.getValue();
+            if (vehicle.isDecommissioned()) {
+                return new javafx.beans.property.SimpleStringProperty("Decommissioned");
+            }
             boolean hasIncompleteMaintenance = vehicle.getMaintenanceSchedules().stream()
                     .anyMatch(schedule -> !schedule.isCompleted());
             String status = hasIncompleteMaintenance ? "In service" : "Available";

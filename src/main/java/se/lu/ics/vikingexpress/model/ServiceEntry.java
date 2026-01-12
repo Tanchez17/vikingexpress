@@ -42,7 +42,25 @@ public class ServiceEntry {
         }
         if (partsReplaced > MAX_PARTS_REPLACED) {
             throw new IllegalArgumentException(
-                    "A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
+                    "A single service entry cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
+        }
+
+        if (vehicle.isDecommissioned()) {
+            throw new IllegalArgumentException("Cannot add service entry to a decommissioned vehicle.");
+        }
+
+        int currentTotalParts = vehicle.getTotalPartsReplaced();
+        int newTotalParts = currentTotalParts + partsReplaced;
+        
+        if (newTotalParts > Vehicle.MAX_TOTAL_PARTS_REPLACED) {
+            vehicle.setDecommissioned(true);
+            throw new IllegalArgumentException(
+                    "Vehicle has reached the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED 
+                    + " parts replaced. The vehicle has been decommissioned.");
+        }
+        
+        if (newTotalParts == Vehicle.MAX_TOTAL_PARTS_REPLACED) {
+            vehicle.setDecommissioned(true);
         }
 
         this.vehicle = vehicle;
@@ -104,8 +122,29 @@ public class ServiceEntry {
         }
         if (partsReplaced > MAX_PARTS_REPLACED) {
             throw new IllegalArgumentException(
-                    "A vehicle cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
+                    "A single service entry cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
         }
+        
+        if (vehicle != null) {
+            if (vehicle.isDecommissioned()) {
+                throw new IllegalArgumentException("Cannot modify service entry for a decommissioned vehicle.");
+            }
+            
+            int currentTotalParts = vehicle.getTotalPartsReplaced();
+            int newTotalParts = currentTotalParts - this.partsReplaced + partsReplaced;
+            
+            if (newTotalParts > Vehicle.MAX_TOTAL_PARTS_REPLACED) {
+                vehicle.setDecommissioned(true);
+                throw new IllegalArgumentException(
+                        "Vehicle would exceed the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED 
+                        + " parts replaced. The vehicle has been decommissioned.");
+            }
+            
+            if (newTotalParts == Vehicle.MAX_TOTAL_PARTS_REPLACED) {
+                vehicle.setDecommissioned(true);
+            }
+        }
+        
         this.partsReplaced = partsReplaced;
     }
 
@@ -116,6 +155,9 @@ public class ServiceEntry {
         if (workshop != null && vehicle.getType() == VehicleType.LARGE_TRUCK
                 && workshop.getType() == WorkshopType.INTERNAL) {
             throw new IllegalArgumentException("Large trucks cannot be serviced at internal workshops.");
+        }
+        if (vehicle.isDecommissioned()) {
+            throw new IllegalArgumentException("Cannot assign service entry to a decommissioned vehicle.");
         }
         this.vehicle = vehicle;
     }
