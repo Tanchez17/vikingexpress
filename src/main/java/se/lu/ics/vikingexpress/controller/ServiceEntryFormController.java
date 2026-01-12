@@ -32,6 +32,7 @@ public class ServiceEntryFormController {
     private ListView<String> partsListView;
 
     private final DataService dataService = DataService.getInstance();
+    private ServiceEntry editingEntry = null;
 
     @FXML
     public void initialize() {
@@ -51,6 +52,24 @@ public class ServiceEntryFormController {
                 .filter(vehicle -> !vehicle.isDecommissioned())
                 .collect(Collectors.toList());
         vehicleCombo.setItems(FXCollections.observableArrayList(availableVehicles));
+    }
+
+    public void setServiceEntry(ServiceEntry entry) {
+        this.editingEntry = entry;
+        if (entry != null) {
+            vehicleCombo.setValue(entry.getVehicle());
+            workshopCombo.setValue(entry.getWorkshop());
+            datePicker.setValue(entry.getDate());
+            problemDescriptionArea.setText(entry.getProblemDescription());
+            costField.setText(String.valueOf(entry.getCost()));
+            partsReplacedField.setText(String.valueOf(entry.getPartsReplaced()));
+            
+            // Populate parts list
+            partsListView.getItems().clear();
+            for (int i = 1; i <= entry.getPartsReplaced(); i++) {
+                partsListView.getItems().add("Part " + i);
+            }
+        }
     }
 
     private void loadWorkshops() {

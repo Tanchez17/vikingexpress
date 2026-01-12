@@ -58,6 +58,12 @@
                   <ListView fx:id="partsListView" prefHeight="150.0" VBox.vgrow="SOMETIMES" />
                   <Label text="Service Cost:" />
                   <TextField fx:id="costTextField" editable="false" styleClass="cost-display" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onEditServiceEntry" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#onRemoveServiceEntry" styleClass="button-danger" text="Remove" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>

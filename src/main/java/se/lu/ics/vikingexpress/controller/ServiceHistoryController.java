@@ -203,6 +203,83 @@ public class ServiceHistoryController {
         }
     }
 
+    @FXML
+    void onEditServiceEntry() {
+        ServiceEntry selected = historyTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Error", "Please select a service entry to edit");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/service-entry-form.fxml"));
+            Parent root = loader.load();
+            ServiceEntryFormController controller = loader.getController();
+            controller.setServiceEntry(selected);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Service Entry");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(historyTable.getScene().getWindow());
+
+            Scene dialogScene = new Scene(root);
+            var parentScene = historyTable.getScene();
+            if (parentScene != null && !parentScene.getStylesheets().isEmpty()) {
+                dialogScene.getStylesheets().addAll(parentScene.getStylesheets());
+            } else {
+                dialogScene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            }
+
+            dialogStage.setScene(dialogScene);
+
+            dialogStage.setOnCloseRequest(e -> {
+                if (byVehicleRadio.isSelected()) {
+                    onVehicleSelected();
+                } else {
+                    onWorkshopSelected();
+                }
+            });
+
+            dialogStage.showAndWait();
+
+            if (byVehicleRadio.isSelected()) {
+                onVehicleSelected();
+            } else {
+                onWorkshopSelected();
+            }
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open service entry form: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void onRemoveServiceEntry() {
+        ServiceEntry selected = historyTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Error", "Please select a service entry to remove");
+            return;
+        }
+
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirm Delete");
+        confirmDialog.setHeaderText("Delete Service Entry");
+        confirmDialog.setContentText(
+                "Are you sure you want to delete this service entry from " + selected.getDate() + "?");
+
+        if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            dataService.removeServiceEntry(selected);
+            if (byVehicleRadio.isSelected()) {
+                onVehicleSelected();
+            } else {
+                onWorkshopSelected();
+            }
+            descriptionArea.clear();
+            costTextField.clear();
+            partsListView.setItems(FXCollections.observableArrayList());
+            showAlert("Success", "Service entry removed successfully");
+        }
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
