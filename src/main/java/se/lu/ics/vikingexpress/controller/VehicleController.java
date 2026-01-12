@@ -39,9 +39,12 @@ public class VehicleController {
     private TextField locationField;
     @FXML
     private TextField costField;
+    @FXML
+    private Label costWarningLabel;
 
     private final DataService dataService = DataService.getInstance();
     private ObservableList<Vehicle> vehicles;
+    private static final double COST_LIMIT = 100000.0;
 
     @FXML
     public void initialize() {
@@ -181,6 +184,8 @@ public class VehicleController {
 
     private void populateFields(Vehicle selected) {
         if (selected == null) {
+            costWarningLabel.setText("");
+            costWarningLabel.setVisible(false);
             return;
         }
 
@@ -189,7 +194,18 @@ public class VehicleController {
         typeCombo.setValue(selected.getType());
         capacityField.setText(String.valueOf(selected.getCapacity()));
         locationField.setText(selected.getCurrentLocation());
-        costField.setText(String.format("%.2f", dataService.getTotalServiceCost(selected)));
+        double totalCost = dataService.getTotalServiceCost(selected);
+        costField.setText(String.format("%.2f", totalCost));
+        
+        // Show warning if cost exceeds limit
+        if (totalCost > COST_LIMIT) {
+            costWarningLabel.setText(String.format("⚠ WARNING: Total service cost (%.2f SEK) exceeds 100,000 SEK threshold!", totalCost));
+            costWarningLabel.setVisible(true);
+            costWarningLabel.setStyle("-fx-text-fill: #d32f2f; -fx-font-weight: bold;");
+        } else {
+            costWarningLabel.setText("");
+            costWarningLabel.setVisible(false);
+        }
     }
 
     private void clearFields() {
@@ -199,6 +215,8 @@ public class VehicleController {
         capacityField.clear();
         locationField.clear();
         costField.clear();
+        costWarningLabel.setText("");
+        costWarningLabel.setVisible(false);
     }
 
     private void showAlert(String title, String message) {

@@ -45,6 +45,7 @@
                   <TextField fx:id="capacityField" promptText="Capacity" />
                   <TextField fx:id="locationField" promptText="Location" />
                   <TextField fx:id="costField" editable="false" promptText="Total Service Cost" />
+                  <Label fx:id="costWarningLabel" styleClass="label-warning" text="" wrapText="true" />
                </children>
             </VBox>
          </children>
