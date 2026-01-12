@@ -47,7 +47,10 @@ public class ServiceEntryFormController {
     }
 
     private void loadVehicles() {
-        vehicleCombo.setItems(FXCollections.observableArrayList(dataService.getAllVehicles()));
+        List<Vehicle> availableVehicles = dataService.getAllVehicles().stream()
+                .filter(vehicle -> !vehicle.isDecommissioned())
+                .collect(Collectors.toList());
+        vehicleCombo.setItems(FXCollections.observableArrayList(availableVehicles));
     }
 
     private void loadWorkshops() {

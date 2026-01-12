@@ -8,12 +8,14 @@ import java.util.List;
 
 public class Vehicle {
     private static long vinCounter = 1;
+    public static final int MAX_TOTAL_PARTS_REPLACED = 100;
 
     private final long vin;
     private String name;
     private VehicleType type;
     private String currentLocation;
     private int capacity;
+    private boolean decommissioned;
 
     private final List<ServiceEntry> serviceEntries = new ArrayList<>();
     private final List<MaintenanceSchedule> maintenanceSchedules = new ArrayList<>();
@@ -28,6 +30,7 @@ public class Vehicle {
         this.type = type;
         this.currentLocation = currentLocation;
         this.capacity = capacity;
+        this.decommissioned = false;
     }
 
     private synchronized long generateVin() {
@@ -52,6 +55,14 @@ public class Vehicle {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public boolean isDecommissioned() {
+        return decommissioned;
+    }
+
+    public void setDecommissioned(boolean decommissioned) {
+        this.decommissioned = decommissioned;
     }
 
     public List<ServiceEntry> getServiceEntries() {
