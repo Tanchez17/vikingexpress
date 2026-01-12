@@ -233,20 +233,11 @@ public class ServiceHistoryController {
             dialogStage.setScene(dialogScene);
 
             dialogStage.setOnCloseRequest(e -> {
-                if (byVehicleRadio.isSelected()) {
-                    onVehicleSelected();
-                } else {
-                    onWorkshopSelected();
-                }
+                historyTable.refresh();
             });
 
             dialogStage.showAndWait();
-
-            if (byVehicleRadio.isSelected()) {
-                onVehicleSelected();
-            } else {
-                onWorkshopSelected();
-            }
+            historyTable.refresh();
         } catch (IOException e) {
             showAlert("Error", "Failed to open service entry form: " + e.getMessage());
         }

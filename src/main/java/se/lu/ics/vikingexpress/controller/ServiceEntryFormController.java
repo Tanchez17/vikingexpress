@@ -2,6 +2,7 @@ package se.lu.ics.vikingexpress.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import se.lu.ics.vikingexpress.model.Vehicle;
@@ -134,11 +135,24 @@ public class ServiceEntryFormController {
             double cost = Double.parseDouble(costStr);
             int parts = Integer.parseInt(partsStr);
 
-            ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
-            dataService.addServiceEntry(entry);
+            if (editingEntry != null) {
+                // Update existing entry
+                editingEntry.setVehicle(vehicle);
+                editingEntry.setWorkshop(workshop);
+                editingEntry.setDate(date);
+                editingEntry.setProblemDescription(problemDesc);
+                editingEntry.setCost(cost);
+                editingEntry.setPartsReplaced(parts);
+                showAlert("Success", "Service entry updated successfully");
+            } else {
+                // Create new entry
+                ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
+                dataService.addServiceEntry(entry);
+                showAlert("Success", "Service entry saved successfully");
+            }
 
             clearFields();
-            showAlert("Success", "Service entry saved successfully");
+            closeStage();
         } catch (NumberFormatException e) {
             showAlert("Error", "Cost and parts replaced must be valid numbers");
         } catch (IllegalArgumentException e) {
@@ -149,6 +163,14 @@ public class ServiceEntryFormController {
     @FXML
     void onCancel() {
         clearFields();
+        closeStage();
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) vehicleCombo.getScene().getWindow();
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     private void clearFields() {
