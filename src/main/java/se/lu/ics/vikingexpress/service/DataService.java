@@ -64,10 +64,6 @@ public class DataService {
         return workshopRepository.getAllWorkshops();
     }
 
-    public java.util.List<Workshop> getWorkshopsByType(se.lu.ics.vikingexpress.model.enums.WorkshopType type) {
-        return workshopRepository.getWorkshopsByType(type);
-    }
-
     public void addServiceEntry(ServiceEntry entry) {
         serviceEntryRepository.addServiceEntry(entry);
     }

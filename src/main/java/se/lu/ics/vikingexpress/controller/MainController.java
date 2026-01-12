@@ -36,19 +36,8 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        setDefaultButtonFalse(dashboardBtn, vehiclesBtn, workshopsBtn, maintenanceBtn,
-                serviceHistoryBtn, reportsBtn, settingsBtn);
-
         showPage("/fxml/dashboard-view.fxml");
         setActiveButton(dashboardBtn);
-    }
-
-    private void setDefaultButtonFalse(Button... buttons) {
-        for (Button btn : buttons) {
-            if (btn != null) {
-                btn.setDefaultButton(false);
-            }
-        }
     }
 
     private void setActiveButton(Button activeButton) {

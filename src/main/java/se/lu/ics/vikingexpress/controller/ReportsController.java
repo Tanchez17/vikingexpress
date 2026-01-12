@@ -9,6 +9,7 @@ import se.lu.ics.vikingexpress.model.Workshop;
 import se.lu.ics.vikingexpress.model.ServiceEntry;
 import se.lu.ics.vikingexpress.service.DataService;
 import se.lu.ics.vikingexpress.util.CostCalculator;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +69,7 @@ public class ReportsController {
     @FXML
     void onRefresh() {
         refreshReports();
-        showAlert("Success", "Reports refreshed");
+        AlertUtils.showAlert("Success", "Reports refreshed");
     }
 
     @FXML
@@ -104,7 +105,7 @@ public class ReportsController {
         content.putString(report.toString());
         clipboard.setContent(content);
 
-        showAlert("Export", "Report copied to clipboard:\n\n" + report.toString());
+        AlertUtils.showAlert("Export", "Report copied to clipboard:\n\n" + report.toString());
     }
 
     private void refreshReports() {
@@ -120,11 +121,12 @@ public class ReportsController {
         if (!serviceEntries.isEmpty()) {
             ServiceEntry mostExpensive = CostCalculator.findMostExpensiveServiceEntry(serviceEntries);
             if (mostExpensive != null) {
-                mostExpensiveJobsLabel.setText(String.format("Most expensive jobs: %.2f | Vehicle: %s (VIN: %d) | Workshop: %s",
-                        mostExpensive.getCost(),
-                        mostExpensive.getVehicle().getName(),
-                        mostExpensive.getVehicle().getVin(),
-                        mostExpensive.getWorkshop().getName()));
+                mostExpensiveJobsLabel
+                        .setText(String.format("Most expensive jobs: %.2f | Vehicle: %s (VIN: %d) | Workshop: %s",
+                                mostExpensive.getCost(),
+                                mostExpensive.getVehicle().getName(),
+                                mostExpensive.getVehicle().getVin(),
+                                mostExpensive.getWorkshop().getName()));
             } else {
                 mostExpensiveJobsLabel.setText("Most expensive jobs: N/A");
             }
@@ -183,12 +185,5 @@ public class ReportsController {
         ObservableList<Vehicle> vehicleList = FXCollections.observableArrayList(vehicles);
         vehicleCostTable.setItems(vehicleList);
         vehicleCostTable.refresh();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

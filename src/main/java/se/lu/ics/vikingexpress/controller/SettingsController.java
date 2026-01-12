@@ -7,6 +7,7 @@ import se.lu.ics.vikingexpress.model.Workshop;
 import se.lu.ics.vikingexpress.model.enums.VehicleType;
 import se.lu.ics.vikingexpress.model.enums.WorkshopType;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 import java.time.LocalDate;
 
 public class SettingsController {
@@ -133,9 +134,9 @@ public class SettingsController {
                     LocalDate.now().plusDays(18),
                     "Oil + filters + brake inspection"));
 
-            showAlert("Success", "Test data loaded successfully!");
+            AlertUtils.showAlert("Success", "Test data loaded successfully!");
         } catch (Exception e) {
-            showAlert("Error", "Could not load test data: " + e.getMessage());
+            AlertUtils.showAlert("Error", "Could not load test data: " + e.getMessage());
         }
     }
 
@@ -149,9 +150,9 @@ public class SettingsController {
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             try {
                 dataService.resetAllData();
-                showAlert("Success", "All application data has been reset successfully!");
+                AlertUtils.showAlert("Success", "All application data has been reset successfully!");
             } catch (Exception e) {
-                showAlert("Error", "Failed to reset data: " + e.getMessage());
+                AlertUtils.showAlert("Error", "Failed to reset data: " + e.getMessage());
             }
         }
     }
@@ -182,17 +183,10 @@ public class SettingsController {
             }
 
         } catch (Exception e) {
-            showAlert("Error", "Failed to toggle dark mode: " + e.getMessage());
+            AlertUtils.showAlert("Error", "Failed to toggle dark mode: " + e.getMessage());
             if (darkModeToggle != null) {
                 darkModeToggle.setSelected(!darkModeToggle.isSelected());
             }
         }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

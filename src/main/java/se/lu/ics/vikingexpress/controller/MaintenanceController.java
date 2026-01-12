@@ -9,6 +9,7 @@ import se.lu.ics.vikingexpress.model.Vehicle;
 import se.lu.ics.vikingexpress.model.Workshop;
 import se.lu.ics.vikingexpress.model.MaintenanceSchedule;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 import java.time.LocalDate;
 
 public class MaintenanceController {
@@ -71,7 +72,7 @@ public class MaintenanceController {
     void onEditMaintenance() {
         MaintenanceSchedule selected = maintenanceTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a maintenance record to edit");
+            AlertUtils.showAlert("Error", "Please select a maintenance record to edit");
             return;
         }
         createMaintenanceDialog(selected);
@@ -81,12 +82,12 @@ public class MaintenanceController {
     void onCompleteMaintenance() {
         MaintenanceSchedule selected = maintenanceTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a maintenance record to complete");
+            AlertUtils.showAlert("Error", "Please select a maintenance record to complete");
             return;
         }
 
         if (selected.isCompleted()) {
-            showAlert("Information", "This maintenance is already completed");
+            AlertUtils.showAlert("Information", "This maintenance is already completed");
             return;
         }
 
@@ -98,7 +99,7 @@ public class MaintenanceController {
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             dataService.markMaintenanceAsCompleted(selected);
             refreshTable();
-            showAlert("Success", "Maintenance marked as completed");
+            AlertUtils.showAlert("Success", "Maintenance marked as completed");
         }
     }
 
@@ -117,7 +118,7 @@ public class MaintenanceController {
     void onRemoveMaintenance() {
         MaintenanceSchedule selected = maintenanceTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a maintenance record to remove");
+            AlertUtils.showAlert("Error", "Please select a maintenance record to remove");
             return;
         }
 
@@ -129,7 +130,7 @@ public class MaintenanceController {
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             dataService.removeMaintenanceSchedule(selected);
             refreshTable();
-            showAlert("Success", "Maintenance record removed");
+            AlertUtils.showAlert("Success", "Maintenance record removed");
         }
     }
 
@@ -178,7 +179,7 @@ public class MaintenanceController {
                     String description = descArea.getText().trim();
 
                     if (vehicle == null || workshop == null || date == null) {
-                        showAlert("Error", "Vehicle, Workshop, and Date are required");
+                        AlertUtils.showAlert("Error", "Vehicle, Workshop, and Date are required");
                         return null;
                     }
 
@@ -186,34 +187,23 @@ public class MaintenanceController {
                         MaintenanceSchedule schedule = new MaintenanceSchedule(
                                 vehicle, workshop, date, description.isEmpty() ? null : description);
                         dataService.addMaintenanceSchedule(schedule);
-                        showAlert("Success", "Maintenance scheduled successfully");
+                        AlertUtils.showAlert("Success", "Maintenance scheduled successfully");
                     } else {
                         existingSchedule.setVehicle(vehicle);
                         existingSchedule.setWorkshop(workshop);
                         existingSchedule.setScheduledDate(date);
                         existingSchedule.setDescription(description.isEmpty() ? null : description);
-                        showAlert("Success", "Maintenance updated successfully");
+                        AlertUtils.showAlert("Success", "Maintenance updated successfully");
                     }
 
                     refreshTable();
                 } catch (IllegalArgumentException e) {
-                    showAlert("Error", e.getMessage());
+                    AlertUtils.showAlert("Error", e.getMessage());
                 }
             }
             return null;
         });
 
         dialog.showAndWait();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert.AlertType alertType = title.equals("Error") || title.equals("Validation Error")
-                ? Alert.AlertType.ERROR
-                : Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

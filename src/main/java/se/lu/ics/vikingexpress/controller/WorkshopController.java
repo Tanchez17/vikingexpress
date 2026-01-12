@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import se.lu.ics.vikingexpress.model.Workshop;
 import se.lu.ics.vikingexpress.model.enums.WorkshopType;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 
 public class WorkshopController {
 
@@ -58,7 +59,7 @@ public class WorkshopController {
             String address = addressField.getText().trim();
 
             if (name.isEmpty() || type == null || address.isEmpty()) {
-                showAlert("Validation Error", "All fields must be filled");
+                AlertUtils.showAlert("Validation Error", "All fields must be filled");
                 return;
             }
 
@@ -67,9 +68,9 @@ public class WorkshopController {
 
             clearFields();
             loadWorkshops();
-            showAlert("Success", "Workshop added successfully");
+            AlertUtils.showAlert("Success", "Workshop added successfully");
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            AlertUtils.showAlert("Error", e.getMessage());
         }
     }
 
@@ -77,7 +78,7 @@ public class WorkshopController {
     void onEditWorkshop() {
         Workshop selected = workshopTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a workshop to edit");
+            AlertUtils.showAlert("Error", "Please select a workshop to edit");
             return;
         }
 
@@ -87,7 +88,7 @@ public class WorkshopController {
             String address = addressField.getText().trim();
 
             if (name.isEmpty() || type == null || address.isEmpty()) {
-                showAlert("Validation Error", "All fields must be filled");
+                AlertUtils.showAlert("Validation Error", "All fields must be filled");
                 return;
             }
 
@@ -97,9 +98,9 @@ public class WorkshopController {
 
             workshopTable.refresh();
             clearFields();
-            showAlert("Success", "Workshop updated successfully");
+            AlertUtils.showAlert("Success", "Workshop updated successfully");
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            AlertUtils.showAlert("Error", e.getMessage());
         }
     }
 
@@ -107,7 +108,7 @@ public class WorkshopController {
     void onDeleteWorkshop() {
         Workshop selected = workshopTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a workshop to delete");
+            AlertUtils.showAlert("Error", "Please select a workshop to delete");
             return;
         }
 
@@ -120,7 +121,7 @@ public class WorkshopController {
             dataService.removeWorkshop(selected);
             loadWorkshops();
             clearFields();
-            showAlert("Success", "Workshop deleted successfully");
+            AlertUtils.showAlert("Success", "Workshop deleted successfully");
         }
     }
 
@@ -138,20 +139,20 @@ public class WorkshopController {
     void onShowServiceHistory() {
         Workshop selected = workshopTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a workshop");
+            AlertUtils.showAlert("Error", "Please select a workshop");
             return;
         }
 
         var entries = dataService.findServiceEntriesByWorkshop(selected);
         if (entries.isEmpty()) {
-            showAlert("Info", "No service history for this workshop");
+            AlertUtils.showAlert("Info", "No service history for this workshop");
         } else {
             StringBuilder sb = new StringBuilder("Service History:\n");
             for (var entry : entries) {
                 sb.append(String.format("Vehicle VIN %d - Date: %s - Cost: %.2f\n",
                         entry.getVehicle().getVin(), entry.getDate(), entry.getCost()));
             }
-            showAlert("Service History", sb.toString());
+            AlertUtils.showAlert("Service History", sb.toString());
         }
     }
 
@@ -159,16 +160,5 @@ public class WorkshopController {
         nameField.clear();
         typeCombo.setValue(null);
         addressField.clear();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert.AlertType alertType = title.equals("Error") || title.equals("Validation Error")
-                ? Alert.AlertType.ERROR
-                : Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
