@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import se.lu.ics.vikingexpress.model.Vehicle;
 import se.lu.ics.vikingexpress.model.enums.VehicleType;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 
 public class VehicleController {
 
@@ -97,13 +98,13 @@ public class VehicleController {
             String capacityStr = capacityField.getText().trim();
 
             if (name.isEmpty() || type == null || location.isEmpty() || capacityStr.isEmpty()) {
-                showAlert("Validation Error", "All fields must be filled");
+                AlertUtils.showAlert("Validation Error", "All fields must be filled");
                 return;
             }
 
             int capacity = Integer.parseInt(capacityStr);
             if (capacity <= 0) {
-                showAlert("Validation Error", "Capacity must be greater than zero");
+                AlertUtils.showAlert("Validation Error", "Capacity must be greater than zero");
                 return;
             }
 
@@ -112,11 +113,11 @@ public class VehicleController {
 
             clearFields();
             loadVehicles();
-            showAlert("Success", "Vehicle added successfully");
+            AlertUtils.showAlert("Success", "Vehicle added successfully");
         } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Capacity must be a valid number");
+            AlertUtils.showAlert("Validation Error", "Capacity must be a valid number");
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            AlertUtils.showAlert("Error", e.getMessage());
         }
     }
 
@@ -124,7 +125,7 @@ public class VehicleController {
     void onEditVehicle() {
         Vehicle selected = vehicleTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a vehicle to edit");
+            AlertUtils.showAlert("Error", "Please select a vehicle to edit");
             return;
         }
 
@@ -135,7 +136,7 @@ public class VehicleController {
             String capacityStr = capacityField.getText().trim();
 
             if (name.isEmpty() || type == null || location.isEmpty() || capacityStr.isEmpty()) {
-                showAlert("Validation Error", "All fields must be filled");
+                AlertUtils.showAlert("Validation Error", "All fields must be filled");
                 return;
             }
 
@@ -147,11 +148,11 @@ public class VehicleController {
 
             vehicleTable.refresh();
             clearFields();
-            showAlert("Success", "Vehicle updated successfully");
+            AlertUtils.showAlert("Success", "Vehicle updated successfully");
         } catch (NumberFormatException e) {
-            showAlert("Error", "Capacity must be a valid number");
+            AlertUtils.showAlert("Error", "Capacity must be a valid number");
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            AlertUtils.showAlert("Error", e.getMessage());
         }
     }
 
@@ -159,7 +160,7 @@ public class VehicleController {
     void onDeleteVehicle() {
         Vehicle selected = vehicleTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "Please select a vehicle to delete");
+            AlertUtils.showAlert("Error", "Please select a vehicle to delete");
             return;
         }
 
@@ -173,7 +174,7 @@ public class VehicleController {
             dataService.removeVehicle(selected);
             loadVehicles();
             clearFields();
-            showAlert("Success", "Vehicle deleted successfully");
+            AlertUtils.showAlert("Success", "Vehicle deleted successfully");
         }
     }
 
@@ -196,10 +197,9 @@ public class VehicleController {
         locationField.setText(selected.getCurrentLocation());
         double totalCost = dataService.getTotalServiceCost(selected);
         costField.setText(String.format("%.2f", totalCost));
-        
-        // Show warning if cost exceeds limit
         if (totalCost > COST_LIMIT) {
-            costWarningLabel.setText(String.format("⚠ WARNING: Total service cost (%.2f SEK) exceeds 100,000 SEK threshold!", totalCost));
+            costWarningLabel.setText(String
+                    .format("⚠ WARNING: Total service cost (%.2f SEK) exceeds 100,000 SEK threshold!", totalCost));
             costWarningLabel.setVisible(true);
             costWarningLabel.setStyle("-fx-text-fill: #d32f2f; -fx-font-weight: bold;");
         } else {
@@ -217,16 +217,5 @@ public class VehicleController {
         costField.clear();
         costWarningLabel.setText("");
         costWarningLabel.setVisible(false);
-    }
-
-    private void showAlert(String title, String message) {
-        Alert.AlertType alertType = title.equals("Error") || title.equals("Validation Error")
-                ? Alert.AlertType.ERROR
-                : Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

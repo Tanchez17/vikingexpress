@@ -34,10 +34,6 @@ public class VehicleRepository {
         return Collections.unmodifiableList(vehicles);
     }
 
-    public int size() {
-        return vehicles.size();
-    }
-
     public void clearAll() {
         vehicles.clear();
     }

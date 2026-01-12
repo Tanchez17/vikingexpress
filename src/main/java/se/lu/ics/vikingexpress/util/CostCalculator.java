@@ -12,10 +12,9 @@ import java.util.List;
 public final class CostCalculator {
 
     private CostCalculator() {
-
     }
 
-    public static double calculateTotalCostForAllVehicles(List<ServiceEntry> serviceEntries) {
+    private static double calculateTotalCostForAllVehicles(List<ServiceEntry> serviceEntries) {
         return serviceEntries.stream()
                 .mapToDouble(ServiceEntry::getCost)
                 .sum();
@@ -32,7 +31,7 @@ public final class CostCalculator {
         if (serviceEntries == null || serviceEntries.isEmpty()) {
             return null;
         }
-        
+
         return serviceEntries.stream()
                 .max(Comparator.comparingDouble(ServiceEntry::getCost))
                 .orElse(null);

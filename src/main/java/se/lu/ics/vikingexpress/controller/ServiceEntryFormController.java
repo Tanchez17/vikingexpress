@@ -10,6 +10,7 @@ import se.lu.ics.vikingexpress.model.ServiceEntry;
 import se.lu.ics.vikingexpress.model.enums.VehicleType;
 import se.lu.ics.vikingexpress.model.enums.WorkshopType;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,7 +93,7 @@ public class ServiceEntryFormController {
         if (selected != null) {
             partsListView.getItems().remove(selected);
         } else {
-            showAlert("Information", "Please select a part to remove");
+            AlertUtils.showAlert("Information", "Please select a part to remove");
         }
     }
 
@@ -108,7 +109,7 @@ public class ServiceEntryFormController {
 
             if (vehicle == null || workshop == null || date == null || problemDesc.isEmpty() ||
                     costStr.isEmpty() || partsStr.isEmpty()) {
-                showAlert("Validation Error", "All fields must be filled");
+                AlertUtils.showAlert("Validation Error", "All fields must be filled");
                 return;
             }
 
@@ -117,23 +118,21 @@ public class ServiceEntryFormController {
 
             ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
             dataService.addServiceEntry(entry);
-
-            // Check if vehicle total cost exceeds 100000 and show warning
             double totalCost = dataService.getTotalServiceCost(vehicle);
             if (totalCost > 100000.0) {
-                showWarningAlert("Cost Warning", 
-                    String.format("Warning: The total cost for %s (VIN: %d) now exceeds 100,000 SEK.\n\n" +
-                        "Current total cost: %.2f SEK\n" +
-                        "This vehicle has exceeded the cost threshold.", 
-                        vehicle.getName(), vehicle.getVin(), totalCost));
+                AlertUtils.showWarningAlert("Cost Warning", "Cost Threshold Exceeded",
+                        String.format("Warning: The total cost for %s (VIN: %d) now exceeds 100,000 SEK.\n\n" +
+                                "Current total cost: %.2f SEK\n" +
+                                "This vehicle has exceeded the cost threshold.",
+                                vehicle.getName(), vehicle.getVin(), totalCost));
             }
 
             clearFields();
-            showAlert("Success", "Service entry saved successfully");
+            AlertUtils.showAlert("Success", "Service entry saved successfully");
         } catch (NumberFormatException e) {
-            showAlert("Error", "Cost and parts replaced must be valid numbers");
+            AlertUtils.showAlert("Error", "Cost and parts replaced must be valid numbers");
         } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage());
+            AlertUtils.showAlert("Error", e.getMessage());
         }
     }
 
@@ -150,24 +149,5 @@ public class ServiceEntryFormController {
         costField.clear();
         partsReplacedField.clear();
         partsListView.getItems().clear();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert.AlertType alertType = title.equals("Error") || title.equals("Validation Error")
-                ? Alert.AlertType.ERROR
-                : Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showWarningAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText("Cost Threshold Exceeded");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

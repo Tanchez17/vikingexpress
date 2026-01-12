@@ -51,14 +51,14 @@ public class ServiceEntry {
 
         int currentTotalParts = vehicle.getTotalPartsReplaced();
         int newTotalParts = currentTotalParts + partsReplaced;
-        
+
         if (newTotalParts > Vehicle.MAX_TOTAL_PARTS_REPLACED) {
             vehicle.setDecommissioned(true);
             throw new IllegalArgumentException(
-                    "Vehicle has reached the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED 
-                    + " parts replaced. The vehicle has been decommissioned.");
+                    "Vehicle has reached the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED
+                            + " parts replaced. The vehicle has been decommissioned.");
         }
-        
+
         if (newTotalParts == Vehicle.MAX_TOTAL_PARTS_REPLACED) {
             vehicle.setDecommissioned(true);
         }
@@ -124,27 +124,27 @@ public class ServiceEntry {
             throw new IllegalArgumentException(
                     "A single service entry cannot have more than " + MAX_PARTS_REPLACED + " parts replaced.");
         }
-        
+
         if (vehicle != null) {
             if (vehicle.isDecommissioned()) {
                 throw new IllegalArgumentException("Cannot modify service entry for a decommissioned vehicle.");
             }
-            
+
             int currentTotalParts = vehicle.getTotalPartsReplaced();
             int newTotalParts = currentTotalParts - this.partsReplaced + partsReplaced;
-            
+
             if (newTotalParts > Vehicle.MAX_TOTAL_PARTS_REPLACED) {
                 vehicle.setDecommissioned(true);
                 throw new IllegalArgumentException(
-                        "Vehicle would exceed the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED 
-                        + " parts replaced. The vehicle has been decommissioned.");
+                        "Vehicle would exceed the maximum limit of " + Vehicle.MAX_TOTAL_PARTS_REPLACED
+                                + " parts replaced. The vehicle has been decommissioned.");
             }
-            
+
             if (newTotalParts == Vehicle.MAX_TOTAL_PARTS_REPLACED) {
                 vehicle.setDecommissioned(true);
             }
         }
-        
+
         this.partsReplaced = partsReplaced;
     }
 

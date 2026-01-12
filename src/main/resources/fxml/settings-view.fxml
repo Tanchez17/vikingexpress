@@ -47,6 +47,8 @@
                <children>
                   <Label styleClass="label-header" text="About" />
                   <Label styleClass="label-subtitle" text="Application version: 1.0-SNAPSHOT" />
+                  <Label styleClass="label-subtitle" text="Developed by: Group 28 &quot;Lord of the Strings 2&quot;" />
+                  <Label styleClass="label-subtitle" text="Java version: 21" />
                   <Label styleClass="label-subtitle" text="JavaFX version: 21.0.6" />
                </children>
             </VBox>

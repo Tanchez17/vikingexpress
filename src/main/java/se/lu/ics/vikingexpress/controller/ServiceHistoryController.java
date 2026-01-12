@@ -13,6 +13,7 @@ import se.lu.ics.vikingexpress.model.Vehicle;
 import se.lu.ics.vikingexpress.model.Workshop;
 import se.lu.ics.vikingexpress.model.ServiceEntry;
 import se.lu.ics.vikingexpress.service.DataService;
+import se.lu.ics.vikingexpress.util.AlertUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -63,11 +64,8 @@ public class ServiceHistoryController {
         loadVehicles();
         loadWorkshops();
         setupRadioButtons();
-
-        // Show workshops section initially since Vehicle filter is selected by default
         workshopsSection.setVisible(true);
         workshopsSection.setManaged(true);
-        
         refreshHistory(dataService.getAllServiceEntries());
         updateWorkshopsList(null);
     }
@@ -95,12 +93,8 @@ public class ServiceHistoryController {
 
         byVehicleRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                vehicleCombo.setDisable(false);
-                vehicleCombo.setVisible(true);
-                vehicleCombo.setManaged(true);
-                workshopCombo.setDisable(true);
-                workshopCombo.setVisible(false);
-                workshopCombo.setManaged(false);
+                setControlVisibility(vehicleCombo, true);
+                setControlVisibility(workshopCombo, false);
                 workshopsSection.setVisible(true);
                 workshopsSection.setManaged(true);
                 onVehicleSelected();
@@ -109,17 +103,19 @@ public class ServiceHistoryController {
 
         byWorkshopRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                workshopCombo.setDisable(false);
-                workshopCombo.setVisible(true);
-                workshopCombo.setManaged(true);
-                vehicleCombo.setDisable(true);
-                vehicleCombo.setVisible(false);
-                vehicleCombo.setManaged(false);
+                setControlVisibility(workshopCombo, true);
+                setControlVisibility(vehicleCombo, false);
                 workshopsSection.setVisible(false);
                 workshopsSection.setManaged(false);
                 onWorkshopSelected();
             }
         });
+    }
+
+    private void setControlVisibility(ComboBox<?> comboBox, boolean visible) {
+        comboBox.setDisable(!visible);
+        comboBox.setVisible(visible);
+        comboBox.setManaged(visible);
     }
 
     private void loadVehicles() {
@@ -174,11 +170,11 @@ public class ServiceHistoryController {
             workshopsListView.setItems(emptyList);
             return;
         }
-        
+
         Set<String> uniqueWorkshops = entries.stream()
                 .map(entry -> entry.getWorkshop().getName())
                 .collect(Collectors.toSet());
-        
+
         ObservableList<String> workshopNames = FXCollections.observableArrayList(uniqueWorkshops);
         workshopNames.sort(String::compareTo);
         workshopsListView.setItems(workshopNames);
@@ -239,14 +235,7 @@ public class ServiceHistoryController {
                 onWorkshopSelected();
             }
         } catch (IOException e) {
-            showAlert("Error", "Failed to open service entry form: " + e.getMessage());
+            AlertUtils.showAlert("Error", "Failed to open service entry form: " + e.getMessage());
         }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

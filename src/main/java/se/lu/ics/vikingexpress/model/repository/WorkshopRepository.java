@@ -1,7 +1,6 @@
 package se.lu.ics.vikingexpress.model.repository;
 
 import se.lu.ics.vikingexpress.model.Workshop;
-import se.lu.ics.vikingexpress.model.enums.WorkshopType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +22,6 @@ public class WorkshopRepository {
 
     public List<Workshop> getAllWorkshops() {
         return Collections.unmodifiableList(workshops);
-    }
-
-    public List<Workshop> getWorkshopsByType(WorkshopType type) {
-        return workshops.stream()
-                .filter(w -> w.getType() == type)
-                .toList();
-    }
-
-    public int size() {
-        return workshops.size();
     }
 
     public void clearAll() {

@@ -45,10 +45,6 @@ public class MaintenanceRepository {
         schedule.markCompleted(java.time.LocalDate.now());
     }
 
-    public int size() {
-        return maintenanceSchedules.size();
-    }
-
     public void clearAll() {
         for (MaintenanceSchedule schedule : new ArrayList<>(maintenanceSchedules)) {
             schedule.getVehicle().removeMaintenanceSchedule(schedule);
