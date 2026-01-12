@@ -15,6 +15,8 @@ import se.lu.ics.vikingexpress.model.ServiceEntry;
 import se.lu.ics.vikingexpress.service.DataService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ServiceHistoryController {
 
@@ -47,6 +49,10 @@ public class ServiceHistoryController {
     private ListView<String> partsListView;
     @FXML
     private TextField costTextField;
+    @FXML
+    private ListView<String> workshopsListView;
+    @FXML
+    private javafx.scene.layout.VBox workshopsSection;
 
     private final DataService dataService = DataService.getInstance();
     private ObservableList<ServiceEntry> historyList;
@@ -58,7 +64,12 @@ public class ServiceHistoryController {
         loadWorkshops();
         setupRadioButtons();
 
+        // Show workshops section initially since Vehicle filter is selected by default
+        workshopsSection.setVisible(true);
+        workshopsSection.setManaged(true);
+        
         refreshHistory(dataService.getAllServiceEntries());
+        updateWorkshopsList(null);
     }
 
     private void setupTableColumns() {
@@ -90,6 +101,8 @@ public class ServiceHistoryController {
                 workshopCombo.setDisable(true);
                 workshopCombo.setVisible(false);
                 workshopCombo.setManaged(false);
+                workshopsSection.setVisible(true);
+                workshopsSection.setManaged(true);
                 onVehicleSelected();
             }
         });
@@ -102,6 +115,8 @@ public class ServiceHistoryController {
                 vehicleCombo.setDisable(true);
                 vehicleCombo.setVisible(false);
                 vehicleCombo.setManaged(false);
+                workshopsSection.setVisible(false);
+                workshopsSection.setManaged(false);
                 onWorkshopSelected();
             }
         });
@@ -124,9 +139,12 @@ public class ServiceHistoryController {
         Vehicle selected = vehicleCombo.getValue();
         if (selected == null) {
             refreshHistory(dataService.getAllServiceEntries());
+            updateWorkshopsList(null);
             return;
         }
-        refreshHistory(dataService.findServiceEntriesByVehicle(selected));
+        List<ServiceEntry> entries = dataService.findServiceEntriesByVehicle(selected);
+        refreshHistory(entries);
+        updateWorkshopsList(entries);
     }
 
     @FXML
@@ -142,6 +160,28 @@ public class ServiceHistoryController {
     private void refreshHistory(List<ServiceEntry> entries) {
         historyList = FXCollections.observableArrayList(entries);
         historyTable.setItems(historyList);
+    }
+
+    private void updateWorkshopsList(List<ServiceEntry> entries) {
+        if (entries == null || entries.isEmpty()) {
+            ObservableList<String> emptyList = FXCollections.observableArrayList();
+            Vehicle selected = vehicleCombo.getValue();
+            if (selected == null) {
+                emptyList.add("Select a vehicle to see workshops");
+            } else {
+                emptyList.add("No service history for this vehicle");
+            }
+            workshopsListView.setItems(emptyList);
+            return;
+        }
+        
+        Set<String> uniqueWorkshops = entries.stream()
+                .map(entry -> entry.getWorkshop().getName())
+                .collect(Collectors.toSet());
+        
+        ObservableList<String> workshopNames = FXCollections.observableArrayList(uniqueWorkshops);
+        workshopNames.sort(String::compareTo);
+        workshopsListView.setItems(workshopNames);
     }
 
     @FXML

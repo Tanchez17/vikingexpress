@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class DashboardController {
 
-    private static final double COST_LIMIT = 10000.0;
+    private static final double COST_LIMIT = 100000.0;
 
     @FXML
     private Label totalVehiclesLabel;
@@ -101,7 +101,11 @@ public class DashboardController {
         if (!serviceEntries.isEmpty()) {
             ServiceEntry mostExpensive = CostCalculator.findMostExpensiveServiceEntry(serviceEntries);
             if (mostExpensive != null) {
-                mostExpensiveJobLabel.setText(String.format("%.2f", mostExpensive.getCost()));
+                mostExpensiveJobLabel.setText(String.format("%.2f | %s (VIN: %d) at %s",
+                        mostExpensive.getCost(),
+                        mostExpensive.getVehicle().getName(),
+                        mostExpensive.getVehicle().getVin(),
+                        mostExpensive.getWorkshop().getName()));
             } else {
                 mostExpensiveJobLabel.setText("N/A");
             }

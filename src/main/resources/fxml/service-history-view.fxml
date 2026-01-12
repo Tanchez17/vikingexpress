@@ -51,8 +51,13 @@
             
             <VBox prefWidth="300.0" spacing="10.0" styleClass="form-panel">
                <children>
+                  <VBox spacing="10.0" fx:id="workshopsSection">
+                     <children>
+                        <Label styleClass="label-header" text="Workshops Used" />
+                        <ListView fx:id="workshopsListView" prefHeight="120.0" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
                   <Label styleClass="label-header" text="Service Details" />
-                  <Label text="Problem Description:" />
                   <TextArea fx:id="descriptionArea" editable="false" promptText="Description" VBox.vgrow="SOMETIMES" />
                   <Label text="Parts Replaced:" />
                   <ListView fx:id="partsListView" prefHeight="150.0" VBox.vgrow="SOMETIMES" />
