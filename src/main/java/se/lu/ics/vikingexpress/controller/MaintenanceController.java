@@ -141,8 +141,18 @@ public class MaintenanceController {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        ComboBox<Vehicle> vehicleSelect = new ComboBox<>(
-                FXCollections.observableArrayList(dataService.getAllVehicles()));
+        ComboBox<Vehicle> vehicleSelect;
+        if (existingSchedule == null) {
+            vehicleSelect = new ComboBox<>(FXCollections.observableArrayList(
+                    dataService.getAllVehicles().stream()
+                            .filter(v -> !v.isDecommissioned())
+                            .toList()));
+        } else {
+            vehicleSelect = new ComboBox<>(FXCollections.observableArrayList(
+                    dataService.getAllVehicles().stream()
+                            .filter(v -> !v.isDecommissioned() || v.equals(existingSchedule.getVehicle()))
+                            .toList()));
+        }
         ComboBox<Workshop> workshopSelect = new ComboBox<>(
                 FXCollections.observableArrayList(dataService.getAllWorkshops()));
         DatePicker dateSelect = new DatePicker(LocalDate.now());
@@ -179,6 +189,12 @@ public class MaintenanceController {
 
                     if (vehicle == null || workshop == null || date == null) {
                         showAlert("Error", "Vehicle, Workshop, and Date are required");
+                        return null;
+                    }
+
+                    // Prevent scheduling maintenance for decommissioned vehicles (safety guard)
+                    if (vehicle.isDecommissioned()) {
+                        showAlert("Error", "Cannot schedule maintenance for a decommissioned vehicle");
                         return null;
                     }
 
