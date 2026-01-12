@@ -194,16 +194,10 @@ public class MainController {
     private String capitalizeWords(String str) {
         if (str == null || str.isBlank())
             return "";
-        String[] words = str.trim().split("\\s+");
-        StringBuilder result = new StringBuilder();
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                result.append(Character.toUpperCase(word.charAt(0)))
-                        .append(word.substring(1).toLowerCase())
-                        .append(' ');
-            }
-        }
-        return result.toString().trim();
+        return java.util.Arrays.stream(str.trim().split("\\s+"))
+                .filter(word -> !word.isEmpty())
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase())
+                .collect(java.util.stream.Collectors.joining(" "));
     }
 
     private enum StatusKind {
