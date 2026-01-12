@@ -118,6 +118,16 @@ public class ServiceEntryFormController {
             ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
             dataService.addServiceEntry(entry);
 
+            // Check if vehicle total cost exceeds 100000 and show warning
+            double totalCost = dataService.getTotalServiceCost(vehicle);
+            if (totalCost > 100000.0) {
+                showWarningAlert("Cost Warning", 
+                    String.format("Warning: The total cost for %s (VIN: %d) now exceeds 100,000 SEK.\n\n" +
+                        "Current total cost: %.2f SEK\n" +
+                        "This vehicle has exceeded the cost threshold.", 
+                        vehicle.getName(), vehicle.getVin(), totalCost));
+            }
+
             clearFields();
             showAlert("Success", "Service entry saved successfully");
         } catch (NumberFormatException e) {
@@ -149,6 +159,14 @@ public class ServiceEntryFormController {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showWarningAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText("Cost Threshold Exceeded");
         alert.setContentText(message);
         alert.showAndWait();
     }

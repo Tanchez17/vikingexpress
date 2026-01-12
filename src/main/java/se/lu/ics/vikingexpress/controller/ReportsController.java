@@ -120,8 +120,11 @@ public class ReportsController {
         if (!serviceEntries.isEmpty()) {
             ServiceEntry mostExpensive = CostCalculator.findMostExpensiveServiceEntry(serviceEntries);
             if (mostExpensive != null) {
-                mostExpensiveJobsLabel
-                        .setText("Most expensive jobs: " + String.format("%.2f", mostExpensive.getCost()));
+                mostExpensiveJobsLabel.setText(String.format("Most expensive jobs: %.2f | Vehicle: %s (VIN: %d) | Workshop: %s",
+                        mostExpensive.getCost(),
+                        mostExpensive.getVehicle().getName(),
+                        mostExpensive.getVehicle().getVin(),
+                        mostExpensive.getWorkshop().getName()));
             } else {
                 mostExpensiveJobsLabel.setText("Most expensive jobs: N/A");
             }
