@@ -27,7 +27,7 @@ public class WorkshopController {
     @FXML
     private TextField addressField;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
     private ObservableList<Workshop> workshops;
 
     @FXML
@@ -47,7 +47,7 @@ public class WorkshopController {
     }
 
     private void loadWorkshops() {
-        workshops = FXCollections.observableArrayList(dataService.getAllWorkshops());
+        workshops = FXCollections.observableArrayList(DATASERVICE.getAllWorkshops());
         workshopTable.setItems(workshops);
     }
 
@@ -64,7 +64,7 @@ public class WorkshopController {
             }
 
             Workshop workshop = new Workshop(name, type, address);
-            dataService.addWorkshop(workshop);
+            DATASERVICE.addWorkshop(workshop);
 
             clearFields();
             loadWorkshops();
@@ -118,7 +118,7 @@ public class WorkshopController {
         confirmDialog.setContentText("Are you sure you want to delete " + selected.getName() + "?");
 
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            dataService.removeWorkshop(selected);
+            DATASERVICE.removeWorkshop(selected);
             loadWorkshops();
             clearFields();
             AlertUtils.showAlert("Success", "Workshop deleted successfully");
@@ -143,7 +143,7 @@ public class WorkshopController {
             return;
         }
 
-        var entries = dataService.findServiceEntriesByWorkshop(selected);
+        var entries = DATASERVICE.findServiceEntriesByWorkshop(selected);
         if (entries.isEmpty()) {
             AlertUtils.showAlert("Info", "No service history for this workshop");
         } else {

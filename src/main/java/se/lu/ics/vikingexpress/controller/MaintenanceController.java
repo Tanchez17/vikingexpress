@@ -27,7 +27,7 @@ public class MaintenanceController {
     @FXML
     private TableColumn<MaintenanceSchedule, String> notesColumn;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
     private ObservableList<MaintenanceSchedule> maintenanceList;
 
     @FXML
@@ -53,7 +53,7 @@ public class MaintenanceController {
     }
 
     private void loadVehicles() {
-        vehicleCombo.setItems(FXCollections.observableArrayList(dataService.getAllVehicles()));
+        vehicleCombo.setItems(FXCollections.observableArrayList(DATASERVICE.getAllVehicles()));
         vehicleCombo.setValue(null);
         refreshTable();
     }
@@ -97,7 +97,7 @@ public class MaintenanceController {
         confirmDialog.setContentText("Mark this maintenance as completed?");
 
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            dataService.markMaintenanceAsCompleted(selected);
+            DATASERVICE.markMaintenanceAsCompleted(selected);
             refreshTable();
             AlertUtils.showAlert("Success", "Maintenance marked as completed");
         }
@@ -106,9 +106,9 @@ public class MaintenanceController {
     private void refreshTable() {
         Vehicle selected = vehicleCombo.getValue();
         if (selected == null) {
-            maintenanceList = FXCollections.observableArrayList(dataService.getAllMaintenanceSchedules());
+            maintenanceList = FXCollections.observableArrayList(DATASERVICE.getAllMaintenanceSchedules());
         } else {
-            maintenanceList = FXCollections.observableArrayList(dataService.findMaintenanceByVehicle(selected));
+            maintenanceList = FXCollections.observableArrayList(DATASERVICE.findMaintenanceByVehicle(selected));
         }
         maintenanceTable.setItems(maintenanceList);
         maintenanceTable.refresh();
@@ -128,7 +128,7 @@ public class MaintenanceController {
         confirmDialog.setContentText("Are you sure you want to remove this maintenance schedule?");
 
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            dataService.removeMaintenanceSchedule(selected);
+            DATASERVICE.removeMaintenanceSchedule(selected);
             refreshTable();
             AlertUtils.showAlert("Success", "Maintenance record removed");
         }
@@ -145,17 +145,17 @@ public class MaintenanceController {
         ComboBox<Vehicle> vehicleSelect;
         if (existingSchedule == null) {
             vehicleSelect = new ComboBox<>(FXCollections.observableArrayList(
-                    dataService.getAllVehicles().stream()
+                    DATASERVICE.getAllVehicles().stream()
                             .filter(v -> !v.isDecommissioned())
                             .toList()));
         } else {
             vehicleSelect = new ComboBox<>(FXCollections.observableArrayList(
-                    dataService.getAllVehicles().stream()
+                    DATASERVICE.getAllVehicles().stream()
                             .filter(v -> !v.isDecommissioned() || v.equals(existingSchedule.getVehicle()))
                             .toList()));
         }
         ComboBox<Workshop> workshopSelect = new ComboBox<>(
-                FXCollections.observableArrayList(dataService.getAllWorkshops()));
+                FXCollections.observableArrayList(DATASERVICE.getAllWorkshops()));
         DatePicker dateSelect = new DatePicker(LocalDate.now());
         TextArea descArea = new TextArea();
         descArea.setWrapText(true);
@@ -202,7 +202,7 @@ public class MaintenanceController {
                     if (existingSchedule == null) {
                         MaintenanceSchedule schedule = new MaintenanceSchedule(
                                 vehicle, workshop, date, description.isEmpty() ? null : description);
-                        dataService.addMaintenanceSchedule(schedule);
+                        DATASERVICE.addMaintenanceSchedule(schedule);
                         AlertUtils.showAlert("Success", "Maintenance scheduled successfully");
                     } else {
                         existingSchedule.setVehicle(vehicle);

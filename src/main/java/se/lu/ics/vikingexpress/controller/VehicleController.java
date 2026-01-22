@@ -43,7 +43,7 @@ public class VehicleController {
     @FXML
     private Label costWarningLabel;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
     private ObservableList<Vehicle> vehicles;
     private static final double COST_LIMIT = 100000.0;
 
@@ -85,7 +85,7 @@ public class VehicleController {
     }
 
     private void loadVehicles() {
-        vehicles = FXCollections.observableArrayList(dataService.getAllVehicles());
+        vehicles = FXCollections.observableArrayList(DATASERVICE.getAllVehicles());
         vehicleTable.setItems(vehicles);
     }
 
@@ -109,7 +109,7 @@ public class VehicleController {
             }
 
             Vehicle vehicle = new Vehicle(name, type, location, capacity);
-            dataService.addVehicle(vehicle);
+            DATASERVICE.addVehicle(vehicle);
 
             clearFields();
             loadVehicles();
@@ -171,7 +171,7 @@ public class VehicleController {
                 "Are you sure you want to delete " + selected.getName() + " (VIN: " + selected.getVin() + ")?");
 
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            dataService.removeVehicle(selected);
+            DATASERVICE.removeVehicle(selected);
             loadVehicles();
             clearFields();
             AlertUtils.showAlert("Success", "Vehicle deleted successfully");
@@ -195,7 +195,7 @@ public class VehicleController {
         typeCombo.setValue(selected.getType());
         capacityField.setText(String.valueOf(selected.getCapacity()));
         locationField.setText(selected.getCurrentLocation());
-        double totalCost = dataService.getTotalServiceCost(selected);
+        double totalCost = DATASERVICE.getTotalServiceCost(selected);
         costField.setText(String.format("%.2f", totalCost));
         if (totalCost > COST_LIMIT) {
             costWarningLabel.setText(String

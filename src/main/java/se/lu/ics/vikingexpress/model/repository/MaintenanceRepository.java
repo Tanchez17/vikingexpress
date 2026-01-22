@@ -10,33 +10,33 @@ import java.util.Collections;
 
 public class MaintenanceRepository {
 
-    private final List<MaintenanceSchedule> maintenanceSchedules = new ArrayList<>();
+    private final List<MaintenanceSchedule> MAINTENANCE_SCHEDULES = new ArrayList<>();
 
     public void addMaintenanceSchedule(MaintenanceSchedule schedule) {
         if (schedule == null) {
             throw new IllegalArgumentException("Maintenance schedule cannot be null.");
         }
-        maintenanceSchedules.add(schedule);
+        MAINTENANCE_SCHEDULES.add(schedule);
         schedule.getVehicle().addMaintenanceSchedule(schedule);
     }
 
     public void removeMaintenanceSchedule(MaintenanceSchedule schedule) {
-        maintenanceSchedules.remove(schedule);
+        MAINTENANCE_SCHEDULES.remove(schedule);
         schedule.getVehicle().removeMaintenanceSchedule(schedule);
     }
 
     public List<MaintenanceSchedule> getAllMaintenanceSchedules() {
-        return Collections.unmodifiableList(maintenanceSchedules);
+        return Collections.unmodifiableList(MAINTENANCE_SCHEDULES);
     }
 
     public List<MaintenanceSchedule> getSchedulesByVehicle(Vehicle vehicle) {
-        return maintenanceSchedules.stream()
+        return MAINTENANCE_SCHEDULES.stream()
                 .filter(s -> s.getVehicle().equals(vehicle))
                 .toList();
     }
 
     public List<MaintenanceSchedule> getSchedulesByWorkshop(Workshop workshop) {
-        return maintenanceSchedules.stream()
+        return MAINTENANCE_SCHEDULES.stream()
                 .filter(s -> s.getWorkshop().equals(workshop))
                 .toList();
     }
@@ -46,9 +46,9 @@ public class MaintenanceRepository {
     }
 
     public void clearAll() {
-        for (MaintenanceSchedule schedule : new ArrayList<>(maintenanceSchedules)) {
+        for (MaintenanceSchedule schedule : new ArrayList<>(MAINTENANCE_SCHEDULES)) {
             schedule.getVehicle().removeMaintenanceSchedule(schedule);
         }
-        maintenanceSchedules.clear();
+        MAINTENANCE_SCHEDULES.clear();
     }
 }

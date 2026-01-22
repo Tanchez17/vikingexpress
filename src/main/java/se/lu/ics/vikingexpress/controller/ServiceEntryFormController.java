@@ -33,7 +33,7 @@ public class ServiceEntryFormController {
     @FXML
     private ListView<String> partsListView;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
     private ServiceEntry editingEntry = null;
 
     @FXML
@@ -50,7 +50,7 @@ public class ServiceEntryFormController {
     }
 
     private void loadVehicles() {
-        List<Vehicle> availableVehicles = dataService.getAllVehicles().stream()
+        List<Vehicle> availableVehicles = DATASERVICE.getAllVehicles().stream()
                 .filter(vehicle -> !vehicle.isDecommissioned())
                 .collect(Collectors.toList());
         vehicleCombo.setItems(FXCollections.observableArrayList(availableVehicles));
@@ -75,7 +75,7 @@ public class ServiceEntryFormController {
     }
 
     private void loadWorkshops() {
-        workshopCombo.setItems(FXCollections.observableArrayList(dataService.getAllWorkshops()));
+        workshopCombo.setItems(FXCollections.observableArrayList(DATASERVICE.getAllWorkshops()));
     }
 
     @FXML
@@ -84,11 +84,11 @@ public class ServiceEntryFormController {
         if (selected != null) {
             List<Workshop> availableWorkshops;
             if (selected.getType() == VehicleType.LARGE_TRUCK) {
-                availableWorkshops = dataService.getAllWorkshops().stream()
+                availableWorkshops = DATASERVICE.getAllWorkshops().stream()
                         .filter(w -> w.getType() == WorkshopType.EXTERNAL)
                         .collect(Collectors.toList());
             } else {
-                availableWorkshops = dataService.getAllWorkshops();
+                availableWorkshops = DATASERVICE.getAllWorkshops();
             }
             workshopCombo.setItems(FXCollections.observableArrayList(availableWorkshops));
         } else {
@@ -148,7 +148,7 @@ public class ServiceEntryFormController {
             } else {
                 // Create new entry
                 ServiceEntry entry = new ServiceEntry(vehicle, date, problemDesc, cost, parts, workshop);
-                dataService.addServiceEntry(entry);
+                DATASERVICE.addServiceEntry(entry);
                 AlertUtils.showAlert("Success", "Service entry saved successfully");
             }
 
