@@ -12,16 +12,16 @@ import se.lu.ics.vikingexpress.model.repository.MaintenanceRepository;
 public class DataService {
     private static DataService instance;
 
-    private final VehicleRepository vehicleRepository;
-    private final WorkshopRepository workshopRepository;
-    private final ServiceEntryRepository serviceEntryRepository;
-    private final MaintenanceRepository maintenanceRepository;
+    private final VehicleRepository VEHICLE_REPOSITORY;
+    private final WorkshopRepository WORKSHOP_REPOSITORY;
+    private final ServiceEntryRepository SERVICE_ENTRY_REPOSITORY;
+    private final MaintenanceRepository MAINTENANCE_REPOSITORY;
 
     private DataService() {
-        this.vehicleRepository = new VehicleRepository();
-        this.workshopRepository = new WorkshopRepository();
-        this.serviceEntryRepository = new ServiceEntryRepository();
-        this.maintenanceRepository = new MaintenanceRepository();
+        this.VEHICLE_REPOSITORY = new VehicleRepository();
+        this.WORKSHOP_REPOSITORY = new WorkshopRepository();
+        this.SERVICE_ENTRY_REPOSITORY = new ServiceEntryRepository();
+        this.MAINTENANCE_REPOSITORY = new MaintenanceRepository();
     }
 
     public static synchronized DataService getInstance() {
@@ -32,90 +32,90 @@ public class DataService {
     }
 
     public void addVehicle(Vehicle vehicle) {
-        vehicleRepository.addVehicle(vehicle);
+        VEHICLE_REPOSITORY.addVehicle(vehicle);
     }
 
     public void removeVehicle(Vehicle vehicle) {
-        serviceEntryRepository.findByVehicle(vehicle).forEach(serviceEntryRepository::removeServiceEntry);
-        maintenanceRepository.getSchedulesByVehicle(vehicle).forEach(maintenanceRepository::removeMaintenanceSchedule);
-        vehicleRepository.removeVehicle(vehicle);
+        SERVICE_ENTRY_REPOSITORY.findByVehicle(vehicle).forEach(SERVICE_ENTRY_REPOSITORY::removeServiceEntry);
+        MAINTENANCE_REPOSITORY.getSchedulesByVehicle(vehicle).forEach(MAINTENANCE_REPOSITORY::removeMaintenanceSchedule);
+        VEHICLE_REPOSITORY.removeVehicle(vehicle);
     }
 
     public Vehicle findVehicleByVin(long vin) {
-        return vehicleRepository.findByVin(vin);
+        return VEHICLE_REPOSITORY.findByVin(vin);
     }
 
     public java.util.List<Vehicle> getAllVehicles() {
-        return vehicleRepository.getAllVehicles();
+        return VEHICLE_REPOSITORY.getAllVehicles();
     }
 
     public void addWorkshop(Workshop workshop) {
-        workshopRepository.addWorkshop(workshop);
+        WORKSHOP_REPOSITORY.addWorkshop(workshop);
     }
 
     public void removeWorkshop(Workshop workshop) {
-        serviceEntryRepository.findByWorkshop(workshop).forEach(serviceEntryRepository::removeServiceEntry);
-        maintenanceRepository.getSchedulesByWorkshop(workshop)
-                .forEach(maintenanceRepository::removeMaintenanceSchedule);
-        workshopRepository.removeWorkshop(workshop);
+        SERVICE_ENTRY_REPOSITORY.findByWorkshop(workshop).forEach(SERVICE_ENTRY_REPOSITORY::removeServiceEntry);
+        MAINTENANCE_REPOSITORY.getSchedulesByWorkshop(workshop)
+                .forEach(MAINTENANCE_REPOSITORY::removeMaintenanceSchedule);
+        WORKSHOP_REPOSITORY.removeWorkshop(workshop);
     }
 
     public java.util.List<Workshop> getAllWorkshops() {
-        return workshopRepository.getAllWorkshops();
+        return WORKSHOP_REPOSITORY.getAllWorkshops();
     }
 
     public void addServiceEntry(ServiceEntry entry) {
-        serviceEntryRepository.addServiceEntry(entry);
+        SERVICE_ENTRY_REPOSITORY.addServiceEntry(entry);
     }
 
     public void removeServiceEntry(ServiceEntry entry) {
-        serviceEntryRepository.removeServiceEntry(entry);
+        SERVICE_ENTRY_REPOSITORY.removeServiceEntry(entry);
     }
 
     public java.util.List<ServiceEntry> getAllServiceEntries() {
-        return serviceEntryRepository.getAllServiceEntries();
+        return SERVICE_ENTRY_REPOSITORY.getAllServiceEntries();
     }
 
     public java.util.List<ServiceEntry> findServiceEntriesByVehicle(Vehicle vehicle) {
-        return serviceEntryRepository.findByVehicle(vehicle);
+        return SERVICE_ENTRY_REPOSITORY.findByVehicle(vehicle);
     }
 
     public java.util.List<ServiceEntry> findServiceEntriesByWorkshop(Workshop workshop) {
-        return serviceEntryRepository.findByWorkshop(workshop);
+        return SERVICE_ENTRY_REPOSITORY.findByWorkshop(workshop);
     }
 
     public double getTotalServiceCost(Vehicle vehicle) {
-        return serviceEntryRepository.getTotalServiceCost(vehicle);
+        return SERVICE_ENTRY_REPOSITORY.getTotalServiceCost(vehicle);
     }
 
     public double getTotalCostForAllVehicles() {
-        return serviceEntryRepository.getTotalCostForAllVehicles();
+        return SERVICE_ENTRY_REPOSITORY.getTotalCostForAllVehicles();
     }
 
     public void addMaintenanceSchedule(MaintenanceSchedule schedule) {
-        maintenanceRepository.addMaintenanceSchedule(schedule);
+        MAINTENANCE_REPOSITORY.addMaintenanceSchedule(schedule);
     }
 
     public void removeMaintenanceSchedule(MaintenanceSchedule schedule) {
-        maintenanceRepository.removeMaintenanceSchedule(schedule);
+        MAINTENANCE_REPOSITORY.removeMaintenanceSchedule(schedule);
     }
 
     public java.util.List<MaintenanceSchedule> getAllMaintenanceSchedules() {
-        return maintenanceRepository.getAllMaintenanceSchedules();
+        return MAINTENANCE_REPOSITORY.getAllMaintenanceSchedules();
     }
 
     public java.util.List<MaintenanceSchedule> findMaintenanceByVehicle(Vehicle vehicle) {
-        return maintenanceRepository.getSchedulesByVehicle(vehicle);
+        return MAINTENANCE_REPOSITORY.getSchedulesByVehicle(vehicle);
     }
 
     public void markMaintenanceAsCompleted(MaintenanceSchedule schedule) {
-        maintenanceRepository.markAsCompleted(schedule);
+        MAINTENANCE_REPOSITORY.markAsCompleted(schedule);
     }
 
     public void resetAllData() {
-        serviceEntryRepository.clearAll();
-        maintenanceRepository.clearAll();
-        vehicleRepository.clearAll();
-        workshopRepository.clearAll();
+        SERVICE_ENTRY_REPOSITORY.clearAll();
+        MAINTENANCE_REPOSITORY.clearAll();
+        VEHICLE_REPOSITORY.clearAll();
+        WORKSHOP_REPOSITORY.clearAll();
     }
 }

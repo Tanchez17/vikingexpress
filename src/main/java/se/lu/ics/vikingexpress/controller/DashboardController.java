@@ -46,7 +46,7 @@ public class DashboardController {
     @FXML
     private ListView<String> upcomingMaintenanceListView;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
 
     @FXML
     public void initialize() {
@@ -60,9 +60,9 @@ public class DashboardController {
 
     public void refreshDashboard() {
         try {
-            List<Vehicle> vehicles = dataService.getAllVehicles();
-            List<ServiceEntry> serviceEntries = dataService.getAllServiceEntries();
-            List<MaintenanceSchedule> maintenanceSchedules = dataService.getAllMaintenanceSchedules();
+            List<Vehicle> vehicles = DATASERVICE.getAllVehicles();
+            List<ServiceEntry> serviceEntries = DATASERVICE.getAllServiceEntries();
+            List<MaintenanceSchedule> maintenanceSchedules = DATASERVICE.getAllMaintenanceSchedules();
 
             updateStatistics(vehicles);
             updateCostIndicators(vehicles, serviceEntries);
@@ -92,7 +92,7 @@ public class DashboardController {
     }
 
     private void updateCostIndicators(List<Vehicle> vehicles, List<ServiceEntry> serviceEntries) {
-        double totalCost = dataService.getTotalCostForAllVehicles();
+        double totalCost = DATASERVICE.getTotalCostForAllVehicles();
         double averageCost = CostCalculator.calculateAverageCost(vehicles, serviceEntries);
 
         totalCostLabel.setText(String.format("%.2f", totalCost));
@@ -122,7 +122,7 @@ public class DashboardController {
         List<String> warnings = new java.util.ArrayList<>();
 
         for (Vehicle vehicle : vehicles) {
-            double totalCost = dataService.getTotalServiceCost(vehicle);
+            double totalCost = DATASERVICE.getTotalServiceCost(vehicle);
             if (totalCost > COST_LIMIT) {
                 warnings.add(String.format("⚠ %s (VIN: %d) exceeds cost limit: %.2f (Limit: %.2f)",
                         vehicle.getName(), vehicle.getVin(), totalCost, COST_LIMIT));

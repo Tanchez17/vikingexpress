@@ -9,53 +9,53 @@ import java.util.List;
 import java.util.Collections;
 
 public class ServiceEntryRepository {
-    private final List<ServiceEntry> serviceEntries = new ArrayList<>();
+    private final List<ServiceEntry> SERVICE_ENTRIES = new ArrayList<>();
 
     public void addServiceEntry(ServiceEntry entry) {
         if (entry == null) {
             throw new IllegalArgumentException("Service entry cannot be null.");
         }
-        serviceEntries.add(entry);
+        SERVICE_ENTRIES.add(entry);
 
         entry.getVehicle().addServiceEntry(entry);
     }
 
     public void removeServiceEntry(ServiceEntry entry) {
-        serviceEntries.remove(entry);
+        SERVICE_ENTRIES.remove(entry);
         entry.getVehicle().removeServiceEntry(entry);
     }
 
     public List<ServiceEntry> getAllServiceEntries() {
-        return Collections.unmodifiableList(serviceEntries);
+        return Collections.unmodifiableList(SERVICE_ENTRIES);
     }
 
     public List<ServiceEntry> findByVehicle(Vehicle vehicle) {
-        return serviceEntries.stream()
+        return SERVICE_ENTRIES.stream()
                 .filter(e -> e.getVehicle().equals(vehicle))
                 .toList();
     }
 
     public List<ServiceEntry> findByWorkshop(Workshop workshop) {
-        return serviceEntries.stream()
+        return SERVICE_ENTRIES.stream()
                 .filter(e -> e.getWorkshop().equals(workshop))
                 .toList();
     }
 
     public double getTotalServiceCost(Vehicle vehicle) {
-        return serviceEntries.stream()
+        return SERVICE_ENTRIES.stream()
                 .filter(e -> e.getVehicle().equals(vehicle))
                 .mapToDouble(ServiceEntry::getCost)
                 .sum();
     }
 
     public double getTotalCostForAllVehicles() {
-        return serviceEntries.stream().mapToDouble(ServiceEntry::getCost).sum();
+        return SERVICE_ENTRIES.stream().mapToDouble(ServiceEntry::getCost).sum();
     }
 
     public void clearAll() {
-        for (ServiceEntry entry : new ArrayList<>(serviceEntries)) {
+        for (ServiceEntry entry : new ArrayList<>(SERVICE_ENTRIES)) {
             entry.getVehicle().removeServiceEntry(entry);
         }
-        serviceEntries.clear();
+        SERVICE_ENTRIES.clear();
     }
 }

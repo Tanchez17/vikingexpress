@@ -55,7 +55,7 @@ public class ServiceHistoryController {
     @FXML
     private javafx.scene.layout.VBox workshopsSection;
 
-    private final DataService dataService = DataService.getInstance();
+    private final DataService DATASERVICE = DataService.getInstance();
     private ObservableList<ServiceEntry> historyList;
 
     @FXML
@@ -66,7 +66,7 @@ public class ServiceHistoryController {
         setupRadioButtons();
         workshopsSection.setVisible(true);
         workshopsSection.setManaged(true);
-        refreshHistory(dataService.getAllServiceEntries());
+        refreshHistory(DATASERVICE.getAllServiceEntries());
         updateWorkshopsList(null);
     }
 
@@ -119,13 +119,13 @@ public class ServiceHistoryController {
     }
 
     private void loadVehicles() {
-        ObservableList<Vehicle> vehicleItems = FXCollections.observableArrayList(dataService.getAllVehicles());
+        ObservableList<Vehicle> vehicleItems = FXCollections.observableArrayList(DATASERVICE.getAllVehicles());
         vehicleCombo.setItems(vehicleItems);
         vehicleCombo.setValue(null);
     }
 
     private void loadWorkshops() {
-        ObservableList<Workshop> workshopItems = FXCollections.observableArrayList(dataService.getAllWorkshops());
+        ObservableList<Workshop> workshopItems = FXCollections.observableArrayList(DATASERVICE.getAllWorkshops());
         workshopCombo.setItems(workshopItems);
         workshopCombo.setValue(null);
     }
@@ -134,11 +134,11 @@ public class ServiceHistoryController {
     void onVehicleSelected() {
         Vehicle selected = vehicleCombo.getValue();
         if (selected == null) {
-            refreshHistory(dataService.getAllServiceEntries());
+            refreshHistory(DATASERVICE.getAllServiceEntries());
             updateWorkshopsList(null);
             return;
         }
-        List<ServiceEntry> entries = dataService.findServiceEntriesByVehicle(selected);
+        List<ServiceEntry> entries = DATASERVICE.findServiceEntriesByVehicle(selected);
         refreshHistory(entries);
         updateWorkshopsList(entries);
     }
@@ -147,10 +147,10 @@ public class ServiceHistoryController {
     void onWorkshopSelected() {
         Workshop selected = workshopCombo.getValue();
         if (selected == null) {
-            refreshHistory(dataService.getAllServiceEntries());
+            refreshHistory(DATASERVICE.getAllServiceEntries());
             return;
         }
-        refreshHistory(dataService.findServiceEntriesByWorkshop(selected));
+        refreshHistory(DATASERVICE.findServiceEntriesByWorkshop(selected));
     }
 
     private void refreshHistory(List<ServiceEntry> entries) {
@@ -294,7 +294,7 @@ public class ServiceHistoryController {
                 "Are you sure you want to delete this service entry from " + selected.getDate() + "?");
 
         if (confirmDialog.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            dataService.removeServiceEntry(selected);
+            DATASERVICE.removeServiceEntry(selected);
             if (byVehicleRadio.isSelected()) {
                 onVehicleSelected();
             } else {

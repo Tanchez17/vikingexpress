@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Collections;
 
 public class VehicleRepository {
-    private final List<Vehicle> vehicles = new ArrayList<>();
+    private final List<Vehicle> VEHICLES = new ArrayList<>();
 
     public void addVehicle(Vehicle vehicle) {
         if (vehicle == null) {
@@ -16,25 +16,25 @@ public class VehicleRepository {
         if (findByVin(vehicle.getVin()) != null) {
             throw new IllegalArgumentException("Vehicle with VIN " + vehicle.getVin() + " already exists.");
         }
-        vehicles.add(vehicle);
+        VEHICLES.add(vehicle);
     }
 
     public void removeVehicle(Vehicle vehicle) {
-        vehicles.remove(vehicle);
+        VEHICLES.remove(vehicle);
     }
 
     public Vehicle findByVin(long vin) {
-        return vehicles.stream()
+        return VEHICLES.stream()
                 .filter(v -> v.getVin() == vin)
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Vehicle> getAllVehicles() {
-        return Collections.unmodifiableList(vehicles);
+        return Collections.unmodifiableList(VEHICLES);
     }
 
     public void clearAll() {
-        vehicles.clear();
+        VEHICLES.clear();
     }
 }

@@ -40,9 +40,9 @@ public class ReportsController {
     @FXML
     private TableColumn<Vehicle, String> vehicleCostColumn;
 
-    private final DataService dataService = DataService.getInstance();
-    private final Map<Workshop, Double> workshopCostCache = new HashMap<>();
-    private final Map<Vehicle, Double> vehicleCostCache = new HashMap<>();
+    private final DataService DATASERVICE = DataService.getInstance();
+    private final Map<Workshop, Double> WORKSHOP_COST_CACHE = new HashMap<>();
+    private final Map<Vehicle, Double> VEHICLE_COST_CACHE = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -54,14 +54,14 @@ public class ReportsController {
         workshopNameColumn.setCellValueFactory(
                 cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
         workshopCostColumn.setCellValueFactory(cellData -> {
-            double cost = workshopCostCache.getOrDefault(cellData.getValue(), 0.0);
+            double cost = WORKSHOP_COST_CACHE.getOrDefault(cellData.getValue(), 0.0);
             return new javafx.beans.property.SimpleStringProperty(String.format("%.2f", cost));
         });
 
         vehicleNameColumn.setCellValueFactory(
                 cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
         vehicleCostColumn.setCellValueFactory(cellData -> {
-            double cost = vehicleCostCache.getOrDefault(cellData.getValue(), 0.0);
+            double cost = VEHICLE_COST_CACHE.getOrDefault(cellData.getValue(), 0.0);
             return new javafx.beans.property.SimpleStringProperty(String.format("%.2f", cost));
         });
     }
@@ -88,7 +88,7 @@ public class ReportsController {
         report.append("WORKSHOP COSTS\n");
         report.append("==============\n");
         for (Workshop ws : workshopCostTable.getItems()) {
-            double cost = workshopCostCache.getOrDefault(ws, 0.0);
+            double cost = WORKSHOP_COST_CACHE.getOrDefault(ws, 0.0);
             report.append(String.format("%s: %.2f\n", ws.getName(), cost));
         }
         report.append("\n");
@@ -96,7 +96,7 @@ public class ReportsController {
         report.append("VEHICLE COSTS\n");
         report.append("=============\n");
         for (Vehicle v : vehicleCostTable.getItems()) {
-            double cost = vehicleCostCache.getOrDefault(v, 0.0);
+            double cost = VEHICLE_COST_CACHE.getOrDefault(v, 0.0);
             report.append(String.format("%s (VIN: %d): %.2f\n", v.getName(), v.getVin(), cost));
         }
 
@@ -109,10 +109,10 @@ public class ReportsController {
     }
 
     private void refreshReports() {
-        var vehicles = dataService.getAllVehicles();
-        var serviceEntries = dataService.getAllServiceEntries();
+        var vehicles = DATASERVICE.getAllVehicles();
+        var serviceEntries = DATASERVICE.getAllServiceEntries();
 
-        double totalCost = dataService.getTotalCostForAllVehicles();
+        double totalCost = DATASERVICE.getTotalCostForAllVehicles();
         double avgCost = CostCalculator.calculateAverageCost(vehicles, serviceEntries);
 
         totalServiceCostLabel.setText(String.format("Total service cost: %.2f", totalCost));
@@ -134,17 +134,17 @@ public class ReportsController {
             mostExpensiveJobsLabel.setText("Most expensive jobs: N/A");
         }
 
-        workshopCostCache.clear();
-        for (Workshop ws : dataService.getAllWorkshops()) {
-            double cost = dataService.findServiceEntriesByWorkshop(ws)
+        WORKSHOP_COST_CACHE.clear();
+        for (Workshop ws : DATASERVICE.getAllWorkshops()) {
+            double cost = DATASERVICE.findServiceEntriesByWorkshop(ws)
                     .stream()
                     .mapToDouble(ServiceEntry::getCost)
                     .sum();
-            workshopCostCache.put(ws, cost);
+            WORKSHOP_COST_CACHE.put(ws, cost);
         }
 
-        if (!workshopCostCache.isEmpty()) {
-            Map.Entry<Workshop, Double> mostExpensiveWS = workshopCostCache.entrySet().stream()
+        if (!WORKSHOP_COST_CACHE.isEmpty()) {
+            Map.Entry<Workshop, Double> mostExpensiveWS = WORKSHOP_COST_CACHE.entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .orElse(null);
             if (mostExpensiveWS != null) {
@@ -157,13 +157,13 @@ public class ReportsController {
             mostExpensiveWorkshopsLabel.setText("Most expensive workshops: N/A");
         }
 
-        vehicleCostCache.clear();
+        VEHICLE_COST_CACHE.clear();
         for (Vehicle v : vehicles) {
-            vehicleCostCache.put(v, dataService.getTotalServiceCost(v));
+            VEHICLE_COST_CACHE.put(v, DATASERVICE.getTotalServiceCost(v));
         }
 
-        if (!vehicleCostCache.isEmpty()) {
-            Map.Entry<Vehicle, Double> mostExpensiveVehicle = vehicleCostCache.entrySet().stream()
+        if (!VEHICLE_COST_CACHE.isEmpty()) {
+            Map.Entry<Vehicle, Double> mostExpensiveVehicle = VEHICLE_COST_CACHE.entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .orElse(null);
             if (mostExpensiveVehicle != null) {
@@ -178,7 +178,7 @@ public class ReportsController {
         }
 
         ObservableList<Workshop> workshopList = FXCollections.observableArrayList(
-                dataService.getAllWorkshops());
+                DATASERVICE.getAllWorkshops());
         workshopCostTable.setItems(workshopList);
         workshopCostTable.refresh();
 

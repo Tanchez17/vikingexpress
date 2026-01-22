@@ -10,22 +10,22 @@ public class Vehicle {
     private static long vinCounter = 1;
     public static final int MAX_TOTAL_PARTS_REPLACED = 100;
 
-    private final long vin;
+    private final long VIN;
     private String name;
     private VehicleType type;
     private String currentLocation;
     private int capacity;
     private boolean decommissioned;
 
-    private final List<ServiceEntry> serviceEntries = new ArrayList<>();
-    private final List<MaintenanceSchedule> maintenanceSchedules = new ArrayList<>();
+    private final List<ServiceEntry> SERVICE_ENTRIES = new ArrayList<>();
+    private final List<MaintenanceSchedule> MAINTENANCE_SCHEDULES = new ArrayList<>();
 
     public Vehicle(String name, VehicleType type, String currentLocation, int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than zero.");
         }
 
-        this.vin = generateVin();
+        this.VIN = generateVin();
         this.name = name;
         this.type = type;
         this.currentLocation = currentLocation;
@@ -38,7 +38,7 @@ public class Vehicle {
     }
 
     public long getVin() {
-        return vin;
+        return VIN;
     }
 
     public String getName() {
@@ -66,11 +66,11 @@ public class Vehicle {
     }
 
     public List<ServiceEntry> getServiceEntries() {
-        return Collections.unmodifiableList(serviceEntries);
+        return Collections.unmodifiableList(SERVICE_ENTRIES);
     }
 
     public List<MaintenanceSchedule> getMaintenanceSchedules() {
-        return Collections.unmodifiableList(maintenanceSchedules);
+        return Collections.unmodifiableList(MAINTENANCE_SCHEDULES);
     }
 
     public void setName(String name) {
@@ -96,35 +96,35 @@ public class Vehicle {
         if (entry == null) {
             throw new IllegalArgumentException("Service entry cannot be null.");
         }
-        serviceEntries.add(entry);
+        SERVICE_ENTRIES.add(entry);
     }
 
     public void removeServiceEntry(ServiceEntry entry) {
-        serviceEntries.remove(entry);
+        SERVICE_ENTRIES.remove(entry);
     }
 
     public double getTotalServiceCost() {
-        return serviceEntries.stream().mapToDouble(ServiceEntry::getCost).sum();
+        return SERVICE_ENTRIES.stream().mapToDouble(ServiceEntry::getCost).sum();
     }
 
     public int getTotalPartsReplaced() {
-        return serviceEntries.stream().mapToInt(ServiceEntry::getPartsReplaced).sum();
+        return SERVICE_ENTRIES.stream().mapToInt(ServiceEntry::getPartsReplaced).sum();
     }
 
     public void addMaintenanceSchedule(MaintenanceSchedule schedule) {
         if (schedule == null) {
             throw new IllegalArgumentException("Maintenance schedule cannot be null.");
         }
-        maintenanceSchedules.add(schedule);
+        MAINTENANCE_SCHEDULES.add(schedule);
     }
 
     public void removeMaintenanceSchedule(MaintenanceSchedule schedule) {
-        maintenanceSchedules.remove(schedule);
+        MAINTENANCE_SCHEDULES.remove(schedule);
     }
 
     @Override
     public String toString() {
-        return name + " (VIN: " + vin + ", Type: " + type + ")";
+        return name + " (VIN: " + VIN + ", Type: " + type + ")";
     }
 
     @Override
@@ -134,11 +134,11 @@ public class Vehicle {
         if (o == null || getClass() != o.getClass())
             return false;
         Vehicle vehicle = (Vehicle) o;
-        return vin == vehicle.vin;
+        return VIN == vehicle.VIN;
     }
 
     @Override
     public int hashCode() {
-        return Long.hashCode(vin);
+        return Long.hashCode(VIN);
     }
 }

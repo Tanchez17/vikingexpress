@@ -7,24 +7,24 @@ import java.util.List;
 import java.util.Collections;
 
 public class WorkshopRepository {
-    private final List<Workshop> workshops = new ArrayList<>();
+    private final List<Workshop> WORKSHOPS = new ArrayList<>();
 
     public void addWorkshop(Workshop workshop) {
         if (workshop == null) {
             throw new IllegalArgumentException("Workshop cannot be null.");
         }
-        workshops.add(workshop);
+        WORKSHOPS.add(workshop);
     }
 
     public void removeWorkshop(Workshop workshop) {
-        workshops.remove(workshop);
+        WORKSHOPS.remove(workshop);
     }
 
     public List<Workshop> getAllWorkshops() {
-        return Collections.unmodifiableList(workshops);
+        return Collections.unmodifiableList(WORKSHOPS);
     }
 
     public void clearAll() {
-        workshops.clear();
+        WORKSHOPS.clear();
     }
 }
