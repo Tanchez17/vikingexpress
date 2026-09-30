@@ -2,7 +2,7 @@
 
 A desktop application for a fictional logistics company, VikingExpress, to keep track of its vehicle fleet: vehicles, workshops, service history, planned maintenance and costs.
 
-Built in Java and JavaFX as a group project (4 people) in the course SYSA21 at Lund University, autumn 2025. I was the project leader.
+Built in Java and JavaFX as a group project (4 people) in the course SYSA21 at Lund University, autumn 2025. I took an informal lead role in planning and design.
 
 ## Features
 
